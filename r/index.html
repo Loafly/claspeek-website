@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <title>Claspeek 친구 초대</title>
+    <meta name="description" content="Claspeek 친구 초대 링크. 앱이 설치되어 있으면 자동으로 열리고, 미설치 시 스토어로 이동합니다.">
+    <meta name="theme-color" content="#7C3AED">
+    <link rel="icon" type="image/png" href="/assets/app-icon.png">
+    <link rel="apple-touch-icon" href="/assets/app-icon.png">
+
+    <meta property="og:title" content="Claspeek 친구 초대">
+    <meta property="og:description" content="Claspeek에 친구를 초대하면 양쪽 모두 추첨권을 받아요!">
+    <meta property="og:image" content="/assets/app-icon.png">
+    <meta property="og:type" content="website">
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Pretendard', 'Apple SD Gothic Neo', Roboto, sans-serif;
+            background: linear-gradient(135deg, #8B5CF6 0%, #3B82F6 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+            color: #fff;
+        }
+        .card {
+            max-width: 420px;
+            width: 100%;
+            background: rgba(255,255,255,0.08);
+            border-radius: 24px;
+            padding: 32px 24px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+        }
+        .logo {
+            width: 72px;
+            height: 72px;
+            border-radius: 16px;
+            margin: 0 auto 16px;
+            background: rgba(255,255,255,0.18);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            font-weight: 800;
+        }
+        h1 { font-size: 22px; font-weight: 800; margin-bottom: 8px; }
+        p { font-size: 14px; line-height: 1.6; opacity: 0.9; margin-bottom: 24px; }
+        .code-box {
+            background: rgba(0,0,0,0.18);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 24px;
+        }
+        .code-label { font-size: 11px; opacity: 0.7; margin-bottom: 6px; letter-spacing: 1px; }
+        .code-value { font-size: 28px; font-weight: 900; letter-spacing: 6px; }
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 14px;
+            background: #fff;
+            color: #3B82F6;
+            border: none;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            text-decoration: none;
+            margin-bottom: 8px;
+        }
+        .btn-ghost {
+            background: rgba(255,255,255,0.12);
+            color: #fff;
+        }
+        .note {
+            font-size: 11px;
+            opacity: 0.7;
+            margin-top: 16px;
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <div class="logo">C</div>
+        <h1>Claspeek 친구 초대</h1>
+        <p>아래 초대 코드로 가입하면<br>양쪽 모두 추첨권을 받아요!</p>
+
+        <div class="code-box">
+            <div class="code-label">초대 코드</div>
+            <div class="code-value" id="codeValue">······</div>
+        </div>
+
+        <a href="#" class="btn" id="openAppBtn">앱에서 열기</a>
+        <a href="#" class="btn btn-ghost" id="installBtn">앱 설치하기</a>
+
+        <p class="note">앱이 자동으로 열리지 않으면<br>"앱 설치하기"를 눌러주세요.</p>
+    </div>
+
+    <script>
+        // URL 경로 (/r/{code}) 또는 query (?code=)에서 추출
+        function extractReferralCode() {
+            const path = window.location.pathname;
+            const match = path.match(/\/r\/([A-Z0-9]+)/i);
+            if (match) return match[1].toUpperCase();
+            const params = new URLSearchParams(window.location.search);
+            const fromQuery = params.get('code');
+            return fromQuery ? fromQuery.toUpperCase() : '';
+        }
+
+        const referralCode = extractReferralCode();
+        if (referralCode) {
+            document.getElementById('codeValue').textContent = referralCode;
+        }
+
+        // 미설치 시 가입 후 자동 적용을 위한 클립보드 저장 시도
+        async function copyToClipboard(text) {
+            try {
+                await navigator.clipboard.writeText(text);
+                return true;
+            } catch (_) {
+                return false;
+            }
+        }
+
+        const ua = navigator.userAgent || '';
+        const isIOS = /iPad|iPhone|iPod/.test(ua);
+        const isAndroid = /Android/.test(ua);
+
+        const IOS_STORE = 'https://apps.apple.com/app/claspeek/idXXXXXXXXXX';
+        const ANDROID_STORE_BASE = 'https://play.google.com/store/apps/details?id=com.claspeek.app';
+
+        // Universal Link / App Link로 앱 직접 진입 시도
+        function openApp() {
+            // app_links가 처리할 수 있는 경로. 도메인이 Universal/App Link로 검증되어 있어야 함.
+            window.location.href = 'https://www.claspeek.com/r/' + encodeURIComponent(referralCode);
+        }
+
+        function openStore() {
+            if (isIOS) {
+                window.location.href = IOS_STORE;
+            } else {
+                // Android: Play Install Referrer로 가입 흐름까지 전달
+                const referrer = encodeURIComponent('utm_source=referral&referral_code=' + referralCode);
+                window.location.href = ANDROID_STORE_BASE + '&referrer=' + referrer;
+            }
+        }
+
+        document.getElementById('openAppBtn').addEventListener('click', (e) => {
+            e.preventDefault();
+            openApp();
+        });
+
+        document.getElementById('installBtn').addEventListener('click', async (e) => {
+            e.preventDefault();
+            if (referralCode) {
+                await copyToClipboard(referralCode);
+            }
+            openStore();
+        });
+
+        // 진입 시 자동으로 앱 열기 시도 (모바일에서만)
+        if (referralCode && (isIOS || isAndroid)) {
+            setTimeout(() => {
+                // 자동 클립보드 복사 시도 후 앱 열기
+                copyToClipboard(referralCode).finally(() => {
+                    openApp();
+                });
+            }, 600);
+        }
+    </script>
+</body>
+</html>
