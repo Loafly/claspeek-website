@@ -5,8 +5,7 @@
       "namespace": "android_app",
       "package_name": "com.claspeek.app",
       "sha256_cert_fingerprints": [
-        "87:FE:E4:01:98:42:43:DE:F0:4C:2E:CD:E6:C8:CF:F7:A4:26:6F:8E:99:3E:92:CD:50:BE:AE:CA:1B:2E:C5:E5",
-        "42:4B:AE:D8:FC:5C:79:71:3F:65:A4:96:14:A9:3F:60:BC:65:70:98:25:91:CF:15:CE:4B:A4:41:EA:23:F9:AC"
+        "REPLACE_WITH_RELEASE_SHA256_FINGERPRINT"
       ]
     }
   }
