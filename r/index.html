@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Claspeek 친구 초대</title>
     <meta name="description" content="Claspeek 친구 초대 링크. 앱이 설치되어 있으면 자동으로 열리고, 미설치 시 스토어로 이동합니다.">
     <meta name="theme-color" content="#7C3AED">
@@ -11,8 +11,10 @@
 
     <meta property="og:title" content="Claspeek 친구 초대">
     <meta property="og:description" content="Claspeek에 친구를 초대하면 양쪽 모두 추첨권을 받아요!">
-    <meta property="og:image" content="/assets/app-icon.png">
+    <meta property="og:image" content="https://www.claspeek.com/assets/app-icon.png">
+    <meta property="og:url" content="https://www.claspeek.com/r/">
     <meta property="og:type" content="website">
+    <meta name="robots" content="noindex">
 
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -129,7 +131,7 @@
         const isIOS = /iPad|iPhone|iPod/.test(ua);
         const isAndroid = /Android/.test(ua);
 
-        const IOS_STORE = 'https://apps.apple.com/app/claspeek/idXXXXXXXXXX';
+        const IOS_STORE = 'https://apps.apple.com/app/id6761687904';
         const ANDROID_STORE_BASE = 'https://play.google.com/store/apps/details?id=com.claspeek.app';
 
         // 앱 직접 진입 — 커스텀 URL 스킴 사용.

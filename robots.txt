@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /r/
+Disallow: /qa/
+Disallow: /planning/
+
+Sitemap: https://www.claspeek.com/sitemap.xml
