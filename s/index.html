@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Claspeek에서 열기</title>
+    <meta name="description" content="Claspeek 앱에서 콘텐츠를 확인하세요. 앱이 설치되어 있으면 자동으로 열리고, 미설치 시 스토어로 이동합니다.">
+    <meta name="theme-color" content="#7C3AED">
+    <meta name="robots" content="noindex">
+    <link rel="icon" type="image/png" href="/assets/app-icon.png">
+    <link rel="apple-touch-icon" href="/assets/app-icon.png">
+
+    <meta property="og:title" content="Claspeek">
+    <meta property="og:description" content="학생들만의 익명 커뮤니티. 앱에서 이어서 확인하세요.">
+    <meta property="og:image" content="https://www.claspeek.com/assets/app-icon.png">
+    <meta property="og:url" content="https://www.claspeek.com/s/">
+    <meta property="og:type" content="website">
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Pretendard', 'Apple SD Gothic Neo', Roboto, sans-serif;
+            background: linear-gradient(135deg, #8B5CF6 0%, #3B82F6 100%);
+            min-height: 100vh;
+            display: flex; align-items: center; justify-content: center;
+            padding: 24px; color: #fff;
+        }
+        .card {
+            max-width: 420px; width: 100%;
+            background: rgba(255,255,255,0.08);
+            border-radius: 24px; padding: 32px 24px;
+            text-align: center; backdrop-filter: blur(10px);
+        }
+        .logo {
+            width: 72px; height: 72px; border-radius: 16px; margin: 0 auto 16px;
+            background: rgba(255,255,255,0.18);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 32px; font-weight: 800;
+        }
+        h1 { font-size: 22px; font-weight: 800; margin-bottom: 8px; }
+        p { font-size: 14px; line-height: 1.6; opacity: 0.9; margin-bottom: 24px; }
+        .kind {
+            display: inline-block; font-size: 12px; font-weight: 700; letter-spacing: .04em;
+            background: rgba(0,0,0,0.18); border-radius: 20px; padding: 5px 14px; margin-bottom: 16px;
+        }
+        .btn {
+            display: block; width: 100%; padding: 14px;
+            background: #fff; color: #3B82F6; border: none; border-radius: 12px;
+            font-size: 15px; font-weight: 700; cursor: pointer; text-decoration: none; margin-bottom: 8px;
+        }
+        .btn-ghost { background: rgba(255,255,255,0.12); color: #fff; }
+        .note { font-size: 11px; opacity: 0.7; margin-top: 16px; }
+        .links { font-size: 12px; opacity: 0.75; margin-top: 20px; margin-bottom: 0; }
+        .links a { color: #fff; text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <div class="logo">C</div>
+        <div class="kind" id="kind" hidden></div>
+        <h1>Claspeek에서 열기</h1>
+        <p id="lead">앱에서 이어서 확인하세요.<br>설치되어 있지 않다면 먼저 앱을 받아주세요.</p>
+
+        <a href="#" class="btn" id="openAppBtn">앱에서 열기</a>
+        <a href="#" class="btn btn-ghost" id="installBtn">앱 설치하기</a>
+
+        <p class="note">앱이 자동으로 열리지 않으면<br>"앱 설치하기"를 눌러주세요.</p>
+        <p class="links">
+            <a href="/">Claspeek 홈</a> ·
+            <a href="/support/">고객 지원</a>
+        </p>
+    </div>
+
+    <script>
+        // 공유 링크 랜딩 — https://www.claspeek.com/s/?t={type}&id={id}
+        //
+        // 경로가 아니라 쿼리를 쓰는 이유: GitHub Pages 는 정적 호스팅이라 /s/vote/123 같은
+        // 와일드카드 경로가 404 상태로 응답한다. 카카오톡·메시지의 링크 미리보기(OG)가
+        // 404 를 건너뛸 수 있어, 이 파일이 200 으로 응답하도록 쿼리 방식을 쓴다.
+        const LABELS = {
+            post: '게시글',
+            vote: '투표',
+            pledge: '다짐',
+            diary: '일기',
+        };
+
+        // 목적격 조사: 받침 있으면 '을', 없으면 '를'.
+        // 한글 음절은 0xAC00 부터 종성 28개 단위로 배열되므로 (코드-0xAC00)%28 로 받침 유무를 안다.
+        function objectParticle(word) {
+            const last = word.charCodeAt(word.length - 1);
+            if (last < 0xac00 || last > 0xd7a3) return '을(를)';
+            return (last - 0xac00) % 28 === 0 ? '를' : '을';
+        }
+
+        const params = new URLSearchParams(window.location.search);
+        const rawType = (params.get('t') || '').toLowerCase();
+        const type = Object.prototype.hasOwnProperty.call(LABELS, rawType) ? rawType : '';
+        // 앱의 라우팅 키는 UUID 또는 영숫자. 그 외 문자는 스킴 조립 전에 걸러낸다.
+        const rawId = params.get('id') || '';
+        const id = /^[A-Za-z0-9-]{1,64}$/.test(rawId) ? rawId : '';
+
+        if (type) {
+            const el = document.getElementById('kind');
+            el.textContent = LABELS[type];
+            el.hidden = false;
+            document.getElementById('lead').innerHTML =
+                `공유된 ${LABELS[type]}${objectParticle(LABELS[type])} 앱에서 확인하세요.<br>설치되어 있지 않다면 먼저 앱을 받아주세요.`;
+        }
+
+        const ua = navigator.userAgent || '';
+        const isIOS = /iPad|iPhone|iPod/.test(ua);
+        const isAndroid = /Android/.test(ua);
+
+        const IOS_STORE = 'https://apps.apple.com/app/id6761687904';
+        const ANDROID_STORE = 'https://play.google.com/store/apps/details?id=com.claspeek.app';
+
+        // 유니버설 링크/앱 링크가 동작하면 이 페이지 자체가 뜨지 않는다.
+        // 여기까지 왔다는 건 검증 실패 또는 미설치라는 뜻이라, 커스텀 스킴으로 한 번 더 시도한다.
+        function openApp() {
+            if (!type || !id) {
+                window.location.href = '/';
+                return;
+            }
+            window.location.href = `claspeek://${type}/${encodeURIComponent(id)}`;
+        }
+
+        function openStore() {
+            window.location.href = isIOS ? IOS_STORE : ANDROID_STORE;
+        }
+
+        document.getElementById('openAppBtn').addEventListener('click', (e) => {
+            e.preventDefault();
+            openApp();
+        });
+
+        document.getElementById('installBtn').addEventListener('click', (e) => {
+            e.preventDefault();
+            openStore();
+        });
+
+        // 모바일에서만 자동 시도. 유효한 대상이 없으면 시도하지 않는다.
+        if (type && id && (isIOS || isAndroid)) {
+            setTimeout(openApp, 600);
+        }
+    </script>
+</body>
+</html>

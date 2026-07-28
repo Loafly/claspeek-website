@@ -3,11 +3,21 @@
     "apps": [],
     "details": [
       {
-        "appIDs": ["YAHGD58JD8.com.claspeek.app"],
+        "appIDs": [
+          "YAHGD58JD8.com.claspeek.app"
+        ],
         "components": [
           {
             "/": "/r/*",
             "comment": "월드컵 친구 초대 딥링크"
+          },
+          {
+            "/": "/s",
+            "comment": "공유 링크 랜딩 (쿼리 방식 /s/?t=&id=)"
+          },
+          {
+            "/": "/s/",
+            "comment": "공유 링크 랜딩 (슬래시 포함)"
           }
         ]
       }

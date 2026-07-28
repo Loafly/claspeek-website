@@ -1,6 +1,7 @@
 User-agent: *
 Allow: /
 Disallow: /r/
+Disallow: /s/
 Disallow: /qa/
 Disallow: /planning/
 
