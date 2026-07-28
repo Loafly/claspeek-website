@@ -33,6 +33,8 @@
         .back { display: inline-block; margin-bottom: 24px; color: #666; text-decoration: none; font-size: 14px; }
         .back:hover { color: #1a1a1a; }
         footer { margin-top: 60px; padding-top: 24px; border-top: 1px solid #eee; font-size: 13px; color: #999; }
+        .biz-info { display: flex; flex-wrap: wrap; gap: 4px 14px; margin-bottom: 10px; font-size: 12px; line-height: 1.7; }
+        .biz-info a { color: inherit; }
     </style>
 </head>
 <body>
@@ -199,13 +201,13 @@
         <h2>13. 개인정보 보호책임자</h2>
         <p>회사는 개인정보 처리에 관한 업무를 총괄해서 책임지고, 개인정보 처리와 관련한 이용자의 문의·불만 처리 및 피해 구제 등을 위하여 아래와 같이 개인정보 보호책임자를 지정하고 있습니다.</p>
         <!--
-            TODO(사업자 정보): 아래 성명·직책은 실제 담당자 정보로 교체 필요.
-            「개인정보 보호법」 제31조 및 시행령 제32조에 따라 보호책임자의 성명·직책·연락처를 공개해야 한다.
+            「개인정보 보호법」 제31조·시행령 제32조는 보호책임자의 "성명 또는 직책·부서명"과 연락처 공개를 요구한다.
+            성명 대신 직책으로 갈음하고 있으며, 담당자 성명을 공개하기로 하면 아래 행에 추가한다.
         -->
         <div class="table-wrap">
         <table>
             <tr><th>항목</th><th>내용</th></tr>
-            <tr><td>보호책임자</td><td>Claspeek 개인정보 보호책임자</td></tr>
+            <tr><td>보호책임자</td><td>개인정보 보호책임자 (Connii)</td></tr>
             <tr><td>담당 부서</td><td>Claspeek 운영팀</td></tr>
             <tr><td>이메일</td><td><a href="mailto:claspeek.official@gmail.com">claspeek.official@gmail.com</a></td></tr>
         </table>
@@ -230,7 +232,7 @@
         <p><strong>공고일: 2026년 7월 28일 / 시행일: 2026년 8월 4일</strong></p>
         <p>변경 이력</p>
         <ul>
-            <li>2026년 8월 4일: 서비스 내 다른 이용자에게 공개되는 정보(제4항) 신설, 권익침해 구제방법(제14항) 신설, 개인정보 보호책임자 안내 구체화</li>
+            <li>2026년 8월 4일: 서비스 내 다른 이용자에게 공개되는 정보(제4항) 신설, 권익침해 구제방법(제14항) 신설, 개인정보 보호책임자 안내 구체화, 사업자 정보 표기</li>
             <li>2026년 5월 14일: 위탁 항목 세분화(AWS SES, Firebase Crashlytics, OAuth 제공자 명시), 학생 인증서 이미지·신고 기록·앱 첨부 이미지 등 수집 항목 명확화, 앱 접근 권한 안내 신설</li>
             <li>2026년 4월 6일: 최초 시행</li>
         </ul>
@@ -243,11 +245,18 @@
         </p>
 
         <!--
-            TODO(사업자 정보): 아래 푸터에 상호 / 대표자 / 사업자등록번호 / 주소를 기재해야 한다.
-            「전자상거래 등에서의 소비자보호에 관한 법률」 제10조에 따른 표시 의무.
-            예) <p class="biz">상호 OOO | 대표자 OOO | 사업자등록번호 000-00-00000 | 주소 OOO</p>
+            TODO(대표자): 공동대표 두 분 성명 확보 시 아래 biz-info 첫 줄에 추가한다.
+            예) <span>대표자 OOO, OOO</span>  (공동대표는 두 명 모두 병기)
         -->
-        <footer>&copy; 2026 Claspeek. All rights reserved.</footer>
+        <footer>
+            <div class="biz-info">
+                <span>상호 Connii</span>
+                <span>사업자등록번호 683-01-03930</span>
+                <span>주소 경기도 화성시 동탄구 동탄첨단산업1로 27, 108호(영천동, 금강펜테리움 IX타워)</span>
+                <span>이메일 <a href="mailto:claspeek.official@gmail.com">claspeek.official@gmail.com</a></span>
+            </div>
+            &copy; 2026 Connii. All rights reserved.
+        </footer>
     </div>
 </body>
 </html>
