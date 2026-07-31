@@ -3,21 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Claspeek — 학생 익명 커뮤니티 & 학습 플래너</title>
-    <meta name="description" content="학생들만의 익명 커뮤니티에서 친구들과 소통하고, 디데이·일정·일기로 공부 루틴을 관리하세요.">
+    <title>Claspeek — 고교학점제·대입 정보·학생 커뮤니티</title>
+    <meta name="description" content="고교학점제 과목 설계와 이수 현황, 학과 경쟁률과 입시 인사이트, 학교 익명 커뮤니티와 급식·학사일정까지. 학생에게 필요한 모든 것을 한 앱에.">
     <meta name="theme-color" content="#7C3AED">
     <link rel="icon" type="image/png" href="/assets/app-icon.png">
     <link rel="apple-touch-icon" href="/assets/app-icon.png">
-    <meta property="og:title" content="Claspeek — 학생 익명 커뮤니티 & 학습 플래너">
-    <meta property="og:description" content="학생들만의 익명 커뮤니티에서 친구들과 소통하고, 디데이·일정·일기로 공부 루틴을 관리하세요.">
+    <meta property="og:title" content="Claspeek — 고교학점제·대입 정보·학생 커뮤니티">
+    <meta property="og:description" content="고교학점제 과목 설계와 이수 현황, 학과 경쟁률과 입시 인사이트, 학교 익명 커뮤니티와 급식·학사일정까지. 학생에게 필요한 모든 것을 한 앱에.">
     <meta property="og:image" content="https://www.claspeek.com/assets/app-icon.png">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://www.claspeek.com/">
     <link rel="canonical" href="https://www.claspeek.com/">
     <!-- app-icon.png 은 512x512 정사각형이라 large_image 카드에서 잘린다. 정사각형에 맞는 summary 카드 사용. -->
     <meta name="twitter:card" content="summary">
-    <meta name="twitter:title" content="Claspeek — 학생 익명 커뮤니티 & 학습 플래너">
-    <meta name="twitter:description" content="학생들만의 익명 커뮤니티에서 친구들과 소통하고, 디데이·일정·일기로 공부 루틴을 관리하세요.">
+    <meta name="twitter:title" content="Claspeek — 고교학점제·대입 정보·학생 커뮤니티">
+    <meta name="twitter:description" content="고교학점제 과목 설계와 이수 현황, 학과 경쟁률과 입시 인사이트, 학교 익명 커뮤니티와 급식·학사일정까지. 학생에게 필요한 모든 것을 한 앱에.">
     <meta name="twitter:image" content="https://www.claspeek.com/assets/app-icon.png">
     <style>
         :root {
@@ -101,7 +101,17 @@
         }
         .hero p.lead {
             font-size: clamp(16px, 2vw, 19px); color: var(--ink-2);
-            max-width: 560px; margin: 0 auto 36px;
+            max-width: 600px; margin: 0 auto 36px;
+        }
+        /* 히어로 하단 키워드 스트립 */
+        .keyword-strip {
+            display: flex; flex-wrap: wrap; gap: 8px; justify-content: center;
+            margin-top: 36px;
+        }
+        .keyword-strip span {
+            font-size: 13px; font-weight: 500; color: var(--ink-2);
+            background: rgba(255,255,255,0.7); border: 1px solid var(--border);
+            padding: 6px 14px; border-radius: 999px;
         }
 
         /* ───── Download buttons ───── */
@@ -136,7 +146,7 @@
         }
         .section-head p {
             font-size: 17px; color: var(--ink-2);
-            max-width: 580px; margin: 0 auto;
+            max-width: 640px; margin: 0 auto;
         }
 
         /* ───── Features grid ───── */
@@ -175,6 +185,11 @@
         }
         .detail-row:last-child { margin-bottom: 0; }
         .detail-row.reverse .text-col { order: 2; }
+        .detail-row .text-col .row-eyebrow {
+            display: inline-block; font-size: 12px; font-weight: 700;
+            color: #7C3AED; letter-spacing: 0.08em; text-transform: uppercase;
+            margin-bottom: 10px;
+        }
         .detail-row .text-col h3 {
             font-size: clamp(24px, 3vw, 32px); font-weight: 800;
             letter-spacing: -0.02em; line-height: 1.25; margin-bottom: 16px;
@@ -216,11 +231,16 @@
             display: flex; flex-direction: column;
         }
         .phone-screen.community { background: linear-gradient(180deg, #F3E8FF 0%, #DBEAFE 100%); }
-        .phone-screen.planner { background: linear-gradient(180deg, #DBEAFE 0%, #E0E7FF 100%); }
-        .phone-screen.safety { background: linear-gradient(180deg, #FCE7F3 0%, #DBEAFE 100%); }
+        .phone-screen.credit    { background: linear-gradient(180deg, #EDE9FE 0%, #E0F2FE 100%); }
+        .phone-screen.admission { background: linear-gradient(180deg, #E0F2FE 0%, #E0E7FF 100%); }
+        .phone-screen.planner   { background: linear-gradient(180deg, #DBEAFE 0%, #E0E7FF 100%); }
+        .phone-screen.safety    { background: linear-gradient(180deg, #FCE7F3 0%, #DBEAFE 100%); }
 
-        /* Phone content (community) */
+        /* 폰 공통 */
         .ps-status { padding: 48px 20px 12px; display: flex; justify-content: space-between; font-size: 11px; color: var(--ink); font-weight: 600; opacity: 0.6; }
+        .ps-head { padding: 0 18px 10px; display: flex; align-items: baseline; justify-content: space-between; }
+        .ps-head .ttl { font-size: 15px; font-weight: 800; letter-spacing: -0.01em; }
+        .ps-head .sub { font-size: 10px; color: var(--ink-2); }
         .ps-card {
             background: #fff; border-radius: 16px; padding: 14px;
             margin: 8px 16px;
@@ -234,32 +254,96 @@
         .ps-card .meta { font-size: 10px; color: var(--ink-3); display: flex; gap: 10px; margin-top: 8px; }
         .ps-vote { background: linear-gradient(90deg, #8B5CF6 0%, #3B82F6 100%); color: #fff; border-radius: 10px; padding: 10px 12px; margin-top: 8px; font-size: 11px; font-weight: 600; display: flex; justify-content: space-between; }
 
-        /* Phone content (planner) */
-        .ps-date { padding: 56px 20px 8px; }
+        /* 폰 — 고교학점제 (이수 현황 + 시간표) */
+        .ps-credit-hero {
+            margin: 0 16px 10px; padding: 16px;
+            background: var(--brand-grad); color: #fff; border-radius: 16px;
+        }
+        .ps-credit-hero .lbl { font-size: 10px; opacity: 0.9; }
+        .ps-credit-hero .row { display: flex; align-items: baseline; justify-content: space-between; margin-top: 2px; }
+        .ps-credit-hero .pct { font-size: 26px; font-weight: 800; line-height: 1.1; }
+        .ps-credit-hero .of { font-size: 11px; opacity: 0.9; }
+        .ps-credit-hero .track { height: 6px; background: rgba(255,255,255,0.3); border-radius: 999px; margin-top: 10px; overflow: hidden; }
+        .ps-credit-hero .fill { height: 100%; width: 74%; background: #fff; border-radius: 999px; }
+        .ps-bars { background: #fff; border-radius: 16px; margin: 0 16px 10px; padding: 12px 14px; box-shadow: 0 4px 14px -6px rgba(15, 23, 42, 0.12); }
+        .ps-bars .cap { font-size: 10px; font-weight: 700; color: var(--ink-2); margin-bottom: 8px; }
+        .ps-bar-row { display: flex; align-items: center; gap: 8px; margin-bottom: 7px; }
+        .ps-bar-row:last-child { margin-bottom: 0; }
+        .ps-bar-row .nm { font-size: 10px; font-weight: 600; width: 30px; flex-shrink: 0; }
+        .ps-bar-row .track { display: block; flex: 1; height: 5px; background: #EEF2F7; border-radius: 999px; overflow: hidden; }
+        .ps-bar-row .fill { display: block; height: 100%; background: var(--brand-grad); border-radius: 999px; }
+        .ps-bar-row .val { font-size: 9px; color: var(--ink-3); width: 34px; text-align: right; flex-shrink: 0; }
+        .ps-tt { background: #fff; border-radius: 16px; margin: 0 16px; padding: 12px 10px; box-shadow: 0 4px 14px -6px rgba(15, 23, 42, 0.12); }
+        .ps-tt .cap { font-size: 10px; font-weight: 700; color: var(--ink-2); margin: 0 4px 8px; }
+        .ps-tt-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 4px; }
+        .ps-tt-grid .hd { font-size: 9px; font-weight: 700; color: var(--ink-3); text-align: center; padding-bottom: 2px; }
+        .ps-tt-grid .cell {
+            font-size: 8px; font-weight: 600; text-align: center;
+            padding: 6px 2px; border-radius: 6px; line-height: 1.2;
+            background: #F1F5F9; color: var(--ink-2);
+        }
+        .ps-tt-grid .cell.a { background: #EDE9FE; color: #6D28D9; }
+        .ps-tt-grid .cell.b { background: #DBEAFE; color: #1D4ED8; }
+        .ps-tt-grid .cell.c { background: #DCFCE7; color: #15803D; }
+
+        /* 폰 — 대입 정보 (경쟁률 + 비교) */
+        .ps-rate { background: #fff; border-radius: 16px; margin: 0 16px 10px; padding: 12px 14px; box-shadow: 0 4px 14px -6px rgba(15, 23, 42, 0.12); }
+        .ps-rate .cap { font-size: 10px; font-weight: 700; color: var(--ink-2); margin-bottom: 10px; display: flex; justify-content: space-between; }
+        .ps-rate .cap em { font-style: normal; color: var(--ink-3); font-weight: 500; }
+        .ps-rate-row { display: flex; align-items: center; gap: 8px; padding: 7px 0; border-top: 1px solid #F1F5F9; }
+        .ps-rate-row:first-of-type { border-top: 0; }
+        .ps-rate-row .uni { flex: 1; min-width: 0; }
+        .ps-rate-row .uni .nm { display: block; font-size: 11px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .ps-rate-row .uni .dep { display: block; font-size: 9px; color: var(--ink-3); }
+        .ps-rate-row .rt { font-size: 12px; font-weight: 800; color: #6D28D9; }
+        .ps-rate-row .dt { font-size: 9px; font-weight: 700; }
+        .ps-rate-row .dt.up { color: #DC2626; }
+        .ps-rate-row .dt.down { color: #2563EB; }
+        .ps-compare {
+            margin: 0 16px 10px; padding: 13px 14px; border-radius: 14px;
+            background: var(--brand-grad); color: #fff;
+            display: flex; align-items: center; justify-content: space-between;
+        }
+        .ps-compare .t { display: block; font-size: 12px; font-weight: 700; }
+        .ps-compare .s { display: block; font-size: 10px; opacity: 0.9; margin-top: 1px; }
+        .ps-insight { background: #fff; border-radius: 16px; margin: 0 16px; padding: 12px 14px; box-shadow: 0 4px 14px -6px rgba(15, 23, 42, 0.12); }
+        .ps-insight .badge-o { display: inline-block; font-size: 8px; font-weight: 700; color: #15803D; background: #DCFCE7; padding: 2px 7px; border-radius: 999px; margin-bottom: 6px; }
+        .ps-insight .t { font-size: 12px; font-weight: 700; line-height: 1.35; }
+        .ps-insight .s { font-size: 9px; color: var(--ink-3); margin-top: 3px; }
+
+        /* 폰 — 학교생활 (급식 + 디데이 + 출석) */
+        .ps-date { padding: 4px 20px 10px; }
         .ps-date .day { font-size: 32px; font-weight: 800; line-height: 1; }
         .ps-date .label { font-size: 12px; color: var(--ink-2); margin-top: 4px; }
-        .ps-task {
-            background: #fff; border-radius: 12px; padding: 12px 14px;
-            margin: 8px 16px; display: flex; gap: 10px; align-items: center;
-            box-shadow: 0 2px 8px -3px rgba(15, 23, 42, 0.08);
-        }
-        .ps-task .check { width: 18px; height: 18px; border-radius: 6px; border: 2px solid var(--ink-3); flex-shrink: 0; }
-        .ps-task.done .check { background: var(--brand-grad); border-color: transparent; position: relative; }
-        .ps-task.done .check::after { content: '✓'; position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 12px; font-weight: 700; }
-        .ps-task .task-text { flex: 1; }
-        .ps-task .task-text .title { font-size: 12px; font-weight: 600; }
-        .ps-task .task-text .time { font-size: 10px; color: var(--ink-3); margin-top: 2px; }
-        .ps-task.done .title { text-decoration: line-through; color: var(--ink-3); }
         .ps-dday {
-            margin: 16px 16px 8px; padding: 14px;
+            margin: 12px 16px 8px; padding: 14px;
             background: var(--brand-grad); color: #fff;
             border-radius: 14px; display: flex; justify-content: space-between; align-items: center;
         }
         .ps-dday .dday-label { font-size: 11px; opacity: 0.9; }
         .ps-dday .dday-title { font-size: 13px; font-weight: 700; margin-top: 2px; }
         .ps-dday .dday-count { font-size: 22px; font-weight: 800; }
+        .ps-meal { background: #fff; border-radius: 16px; margin: 0 16px 8px; padding: 13px 14px; box-shadow: 0 4px 14px -6px rgba(15, 23, 42, 0.12); }
+        .ps-meal .cap { font-size: 10px; font-weight: 700; color: #15803D; background: #DCFCE7; display: inline-block; padding: 2px 8px; border-radius: 999px; margin-bottom: 8px; }
+        .ps-meal .menu { display: flex; flex-wrap: wrap; gap: 4px; }
+        .ps-meal .menu span { font-size: 10px; font-weight: 500; background: #F1F5F9; color: var(--ink-2); padding: 3px 8px; border-radius: 6px; }
+        .ps-meal .nut { font-size: 9px; color: var(--ink-3); margin-top: 8px; }
+        .ps-sched { background: #fff; border-radius: 16px; margin: 0 16px 8px; padding: 12px 14px; box-shadow: 0 4px 14px -6px rgba(15, 23, 42, 0.12); }
+        .ps-sched .cap { font-size: 10px; font-weight: 700; color: var(--ink-2); margin-bottom: 8px; }
+        .ps-sched-row { display: flex; gap: 9px; align-items: center; margin-bottom: 6px; }
+        .ps-sched-row:last-child { margin-bottom: 0; }
+        .ps-sched-row .dt { font-size: 9px; font-weight: 700; color: #6D28D9; background: #EDE9FE; padding: 2px 6px; border-radius: 5px; flex-shrink: 0; }
+        .ps-sched-row .tx { font-size: 11px; font-weight: 600; }
+        .ps-streak {
+            margin: 0 16px; padding: 12px 14px; border-radius: 14px;
+            background: #fff; box-shadow: 0 4px 14px -6px rgba(15, 23, 42, 0.12);
+            display: flex; align-items: center; justify-content: space-between;
+        }
+        .ps-streak .t { display: block; font-size: 11px; font-weight: 700; }
+        .ps-streak .s { display: block; font-size: 9px; color: var(--ink-3); margin-top: 1px; }
+        .ps-streak .n { font-size: 18px; font-weight: 800; color: #6D28D9; }
 
-        /* Phone content (safety) */
+        /* 폰 — 안전 */
         .ps-shield { display: flex; justify-content: center; align-items: center; height: 200px; }
         .ps-shield svg { width: 96px; height: 96px; }
         .ps-safety-list { padding: 0 16px; }
@@ -324,8 +408,8 @@
             .hero img.logo { width: 72px; height: 72px; }
             .detail-row { grid-template-columns: 1fr; gap: 32px; margin-bottom: 64px; }
             .detail-row.reverse .text-col { order: 0; }
-            .phone { width: 260px; height: 520px; }
-            .phone::before { width: 96px; height: 24px; }
+            /* 폰은 300x600 유지 — 크기만 줄이면 내부 콘텐츠가 overflow:hidden 에 잘린다.
+               좁은 화면에서는 아래 zoom 으로 통째로 축소한다. */
             .nav-links a:not(.nav-cta):not(.nav-support) { display: none; }
             .nav-links a.nav-support { padding: 8px 8px; }
             .final-cta { padding: 48px 24px; border-radius: 20px; margin: 0 16px 64px; }
@@ -334,6 +418,13 @@
             .download a { padding: 12px 18px; }
             .download a strong { font-size: 14px; }
             .download a small { font-size: 10px; }
+            .keyword-strip span { font-size: 12px; padding: 5px 11px; }
+        }
+        /* 300px 폰 + 좌우 여백이 안 들어가는 좁은 화면. zoom 은 크기와 레이아웃을
+           함께 줄이므로 내부 콘텐츠 비율이 유지된다(미지원 브라우저는 원본 크기). */
+        @media (max-width: 380px) {
+            section { padding-left: 16px; padding-right: 16px; }
+            .phone { zoom: 0.86; }
         }
 
         @media (prefers-reduced-motion: reduce) {
@@ -363,8 +454,8 @@
             <div class="hero-inner">
                 <img class="logo" src="/assets/logo.png" alt="Claspeek 로고" width="88" height="88">
                 <span class="badge">학생만의 공간</span>
-                <h1>학교생활을 한 손에,<br><span class="grad">Claspeek</span></h1>
-                <p class="lead">친구들과 익명으로 소통하고, 디데이·일정·일기로 공부 루틴을 관리하세요. 학생을 위해 만든 단 하나의 앱.</p>
+                <h1>고교학점제부터 대입까지,<br><span class="grad">Claspeek</span></h1>
+                <p class="lead">과목을 고르고 이수 학점을 채우고, 가고 싶은 대학을 비교하고, 같은 학교 친구들과 익명으로 소통하세요. 학생에게 필요한 모든 것을 앱 하나에 담았습니다.</p>
                 <div class="download" id="download">
                     <a class="ios" href="https://apps.apple.com/app/id6761687904" aria-label="App Store에서 다운로드">
                         <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.05 12.04c-.03-2.96 2.42-4.39 2.53-4.46-1.38-2.02-3.53-2.3-4.3-2.33-1.83-.19-3.57 1.08-4.5 1.08-.94 0-2.36-1.05-3.88-1.02-2 .03-3.84 1.16-4.87 2.95-2.08 3.6-.53 8.93 1.5 11.86.99 1.43 2.18 3.04 3.74 2.98 1.5-.06 2.07-.97 3.88-.97 1.81 0 2.32.97 3.91.94 1.62-.03 2.64-1.46 3.63-2.9 1.14-1.66 1.61-3.27 1.64-3.36-.03-.02-3.15-1.21-3.18-4.79zM14.07 3.32c.83-1.01 1.39-2.4 1.24-3.79-1.2.05-2.65.8-3.51 1.8-.77.89-1.45 2.32-1.27 3.68 1.34.1 2.71-.68 3.54-1.69z"/></svg>
@@ -375,6 +466,15 @@
                         <span><small>GET IT ON</small><strong>Google Play</strong></span>
                     </a>
                 </div>
+                <div class="keyword-strip">
+                    <span>고교학점제</span>
+                    <span>내 시간표</span>
+                    <span>학과 경쟁률</span>
+                    <span>입시 인사이트</span>
+                    <span>익명 커뮤니티</span>
+                    <span>급식·학사일정</span>
+                    <span>디데이·일기</span>
+                </div>
             </div>
         </section>
 
@@ -384,29 +484,50 @@
                 <div class="section-head">
                     <span class="eyebrow">Features</span>
                     <h2>학생에게 필요한 것만, 정확히</h2>
-                    <p>커뮤니티·플래너·안전 — Claspeek는 학생 일상의 세 축을 한 곳에 담았습니다.</p>
+                    <p>진로 설계부터 하루 루틴까지 — Claspeek는 학생 일상의 여섯 축을 한 곳에 담았습니다.</p>
                 </div>
                 <div class="feature-grid">
+                    <div class="feature-card">
+                        <div class="icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10L12 5 2 10l10 5 10-5z"/><path d="M6 12v5c0 1.7 2.7 3 6 3s6-1.3 6-3v-5"/></svg>
+                        </div>
+                        <h3>고교학점제 설계</h3>
+                        <p>과목군·계열·내신 난이도로 과목을 찾고, 내 시간표에 배치하고, 영역별 이수 학점과 졸업 요건까지 한눈에 관리하세요.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 15l4-5 4 3 5-7"/></svg>
+                        </div>
+                        <h3>대입 정보</h3>
+                        <p>학과 경쟁률과 개설 계열을 확인하고, 관심 대학·학과를 담아 나란히 비교하세요. 입시 인사이트는 공식 자료를 기반으로 합니다.</p>
+                    </div>
                     <div class="feature-card">
                         <div class="icon" aria-hidden="true">
                             <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
                         </div>
                         <h3>익명 커뮤니티</h3>
-                        <p>같은 학교 친구들과 익명으로 의견을 나누세요. 투표·다짐·게시판으로 학교생활의 모든 순간을 공유합니다.</p>
+                        <p>같은 학교 친구들과 익명으로 의견을 나누세요. 학교 채널·투표·다짐으로 학교생활의 모든 순간을 공유합니다.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V8l7-5 7 5v13"/><path d="M10 21v-6h4v6"/></svg>
+                        </div>
+                        <h3>우리학교</h3>
+                        <p>오늘 급식과 이번 주 식단, 학사일정, 학교 안내를 앱에서 바로. 우리 학교 채널에서 친구들 이야기도 함께 확인하세요.</p>
                     </div>
                     <div class="feature-card">
                         <div class="icon" aria-hidden="true">
                             <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
                         </div>
-                        <h3>학습 플래너</h3>
-                        <p>일정·디데이·일기·출석을 한 화면에서. 시험·수능까지 남은 날을 매일 확인하고, 공부 루틴을 꾸준히 이어가세요.</p>
+                        <h3>플래너 &amp; 출석</h3>
+                        <p>일정·디데이·일기를 한 화면에서. 매일 출석 체크로 공부 루틴을 쌓고, 랭킹과 배지로 꾸준함을 확인하세요.</p>
                     </div>
                     <div class="feature-card">
                         <div class="icon" aria-hidden="true">
                             <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
                         </div>
                         <h3>안전한 학생 공간</h3>
-                        <p>학생 인증으로 진짜 학생만 입장합니다. 부적절한 콘텐츠에는 무관용 정책으로 신고·차단을 빠르게 처리해요.</p>
+                        <p>학생증 확인을 거쳐야 입장할 수 있습니다. 부적절한 콘텐츠에는 무관용 정책으로 신고·차단을 빠르게 처리해요.</p>
                     </div>
                 </div>
             </div>
@@ -415,25 +536,124 @@
         <!-- Detail rows -->
         <section>
             <div class="section-inner">
+                <!-- 1. 고교학점제 -->
                 <div class="detail-row">
                     <div class="text-col">
-                        <h3>친구들과 솔직하게,<br>익명으로</h3>
-                        <p>이름 대신 진짜 의견이 모이는 공간. 친구들이 무슨 생각을 하는지, 어떤 다짐을 하는지 가볍게 들여다보세요.</p>
+                        <span class="row-eyebrow">고교학점제</span>
+                        <h3>어떤 과목을 들을지,<br>더는 혼자 고민하지 마세요</h3>
+                        <p>과목을 찾고, 시간표에 넣고, 이수 학점을 채우는 과정을 하나로 이었습니다. 진로 설계에서는 가고 싶은 대학·학과를 고르면 권장 과목과 세특 방향까지 이어집니다.</p>
                         <ul>
-                            <li>학교·관심사별 게시판과 트렌딩</li>
-                            <li>실시간 투표로 친구들 생각 한눈에</li>
+                            <li>과목군·계열·내신 난이도로 과목 탐색</li>
+                            <li>관심 과목을 요일·교시에 배치하는 내 시간표</li>
+                            <li>영역별 이수 학점과 졸업 요구 학점 관리</li>
+                            <li>진로 설계로 권장 과목·관련 학과 확인</li>
+                        </ul>
+                    </div>
+                    <div class="phone-col">
+                        <div class="phone" aria-hidden="true">
+                            <div class="phone-screen credit">
+                                <div class="ps-status"><span>9:41</span><span>●●●</span></div>
+                                <div class="ps-head"><span class="ttl">이수 현황</span><span class="sub">전체 학기</span></div>
+                                <div class="ps-credit-hero">
+                                    <div class="lbl">이수율</div>
+                                    <div class="row"><span class="pct">74%</span><span class="of">140 / 192학점</span></div>
+                                    <div class="track"><div class="fill"></div></div>
+                                </div>
+                                <div class="ps-bars">
+                                    <div class="cap">영역별 이수 학점</div>
+                                    <div class="ps-bar-row"><span class="nm">국어</span><span class="track"><span class="fill" style="width:86%"></span></span><span class="val">12/14</span></div>
+                                    <div class="ps-bar-row"><span class="nm">수학</span><span class="track"><span class="fill" style="width:100%"></span></span><span class="val">14/14</span></div>
+                                    <div class="ps-bar-row"><span class="nm">영어</span><span class="track"><span class="fill" style="width:79%"></span></span><span class="val">11/14</span></div>
+                                    <div class="ps-bar-row"><span class="nm">과학</span><span class="track"><span class="fill" style="width:67%"></span></span><span class="val">8/12</span></div>
+                                </div>
+                                <div class="ps-tt">
+                                    <div class="cap">내 시간표</div>
+                                    <div class="ps-tt-grid">
+                                        <span class="hd">월</span><span class="hd">화</span><span class="hd">수</span><span class="hd">목</span><span class="hd">금</span>
+                                        <span class="cell a">미적분</span><span class="cell b">영어독해</span><span class="cell a">미적분</span><span class="cell c">물리학Ⅰ</span><span class="cell b">화법과작문</span>
+                                        <span class="cell c">화학Ⅰ</span><span class="cell a">확률과통계</span><span class="cell b">영어독해</span><span class="cell a">미적분</span><span class="cell c">물리학Ⅰ</span>
+                                        <span class="cell b">문학</span><span class="cell c">생명과학</span><span class="cell">진로활동</span><span class="cell b">문학</span><span class="cell a">확률과통계</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2. 대입 정보 -->
+                <div class="detail-row reverse">
+                    <div class="text-col">
+                        <span class="row-eyebrow">대입 정보</span>
+                        <h3>가고 싶은 대학,<br>숫자로 비교해 보세요</h3>
+                        <p>학과 경쟁률과 개설 계열을 확인하고, 마음에 드는 대학과 학과를 담아 나란히 놓고 비교하세요. 입시 인사이트는 공식 자료를 기반으로 정리합니다.</p>
+                        <ul>
+                            <li>학과별 경쟁률과 지금 뜨는 대학</li>
+                            <li>관심 대학·관심 학과 담고 비교하기</li>
+                            <li>대학별 개설 학과·계열 정보</li>
+                            <li>공식 입시 캘린더와 계열별 권장 과목</li>
+                        </ul>
+                    </div>
+                    <div class="phone-col">
+                        <div class="phone" aria-hidden="true">
+                            <div class="phone-screen admission">
+                                <div class="ps-status"><span>9:41</span><span>●●●</span></div>
+                                <div class="ps-head"><span class="ttl">대학 둘러보기</span><span class="sub">전체보기</span></div>
+                                <div class="ps-rate">
+                                    <div class="cap"><span>학과 경쟁률</span><em>전년 대비</em></div>
+                                    <div class="ps-rate-row">
+                                        <span class="uni"><span class="nm">컴퓨터공학과</span><span class="dep">공학계열</span></span>
+                                        <span class="rt">18.4 : 1</span><span class="dt up">▲ 2.1</span>
+                                    </div>
+                                    <div class="ps-rate-row">
+                                        <span class="uni"><span class="nm">경영학과</span><span class="dep">상경계열</span></span>
+                                        <span class="rt">12.7 : 1</span><span class="dt down">▼ 0.8</span>
+                                    </div>
+                                    <div class="ps-rate-row">
+                                        <span class="uni"><span class="nm">간호학과</span><span class="dep">의약계열</span></span>
+                                        <span class="rt">15.2 : 1</span><span class="dt up">▲ 1.4</span>
+                                    </div>
+                                    <div class="ps-rate-row">
+                                        <span class="uni"><span class="nm">화학공학과</span><span class="dep">공학계열</span></span>
+                                        <span class="rt">10.9 : 1</span><span class="dt down">▼ 0.3</span>
+                                    </div>
+                                </div>
+                                <div class="ps-compare">
+                                    <span><span class="t">관심 학과 비교하기</span><span class="s">담은 학과 4개</span></span>
+                                    <span>→</span>
+                                </div>
+                                <div class="ps-insight">
+                                    <span class="badge-o">공식 자료 기반</span>
+                                    <div class="t">고교학점제 · 2028 대입 대비</div>
+                                    <div class="s">계열별 권장 과목 한눈에 보기</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3. 커뮤니티 -->
+                <div class="detail-row">
+                    <div class="text-col">
+                        <span class="row-eyebrow">커뮤니티</span>
+                        <h3>친구들과 솔직하게,<br>익명으로</h3>
+                        <p>이름 대신 진짜 의견이 모이는 공간. 우리 학교 채널에서 친구들이 무슨 생각을 하는지, 어떤 다짐을 하는지 가볍게 들여다보세요.</p>
+                        <ul>
+                            <li>우리 학교 채널과 카테고리별 게시판</li>
+                            <li>실시간 트렌딩으로 지금 뜨는 이야기</li>
+                            <li>투표로 친구들 생각 한눈에</li>
                             <li>다짐(Pledge)으로 함께하는 동기부여</li>
-                            <li>댓글·답글·좋아요로 자연스러운 소통</li>
+                            <li>활동 랭킹과 배지로 쌓이는 기록</li>
                         </ul>
                     </div>
                     <div class="phone-col">
                         <div class="phone" aria-hidden="true">
                             <div class="phone-screen community">
                                 <div class="ps-status"><span>9:41</span><span>●●●</span></div>
+                                <div class="ps-head"><span class="ttl">우리 학교 채널</span><span class="sub">실시간</span></div>
                                 <div class="ps-card">
                                     <span class="tag study">공부</span>
-                                    <h4>수능 D-100, 다들 어떻게 공부하고 있어?</h4>
-                                    <div class="meta"><span>♥ 142</span><span>💬 38</span></div>
+                                    <h4>고2인데 미적분 vs 확통 뭐 들을까?</h4>
+                                    <div class="meta"><span>♥ 142</span><span>💬 38</span><span>👁 1.2k</span></div>
                                 </div>
                                 <div class="ps-card">
                                     <span class="tag life">학교생활</span>
@@ -443,22 +663,25 @@
                                 <div class="ps-card">
                                     <span class="tag fun">재미</span>
                                     <h4>오늘 급식 별점 매기기 🍱</h4>
-                                    <div class="meta"><span>♥ 89</span><span>💬 24</span></div>
+                                    <div class="meta"><span>♥ 89</span><span>💬 24</span><span>👁 640</span></div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
+                <!-- 4. 학교생활 -->
                 <div class="detail-row reverse">
                     <div class="text-col">
-                        <h3>오늘 할 일도,<br>수능까지 남은 날도</h3>
-                        <p>공부 루틴을 시각화하고 작은 성공을 매일 쌓아 보세요. 출석 체크와 일기까지, 이 앱 하나로 끝.</p>
+                        <span class="row-eyebrow">매일의 학교생활</span>
+                        <h3>오늘 급식도,<br>수능까지 남은 날도</h3>
+                        <p>급식과 학사일정은 앱을 열면 바로 보이고, 디데이·일기·출석 체크로 하루를 정리합니다. 작은 성공이 매일 쌓이도록.</p>
                         <ul>
-                            <li>일정·할 일을 카테고리별로 관리</li>
+                            <li>오늘 급식과 이번 주 식단, 영양정보·원산지</li>
+                            <li>학사일정과 학교 안내</li>
                             <li>중요한 날짜를 디데이로 고정</li>
                             <li>매일 일기로 하루 돌아보기</li>
-                            <li>출석 스트릭으로 꾸준함 보상</li>
+                            <li>출석 체크로 꾸준함 쌓기</li>
                         </ul>
                     </div>
                     <div class="phone-col">
@@ -476,32 +699,38 @@
                                     </div>
                                     <div class="dday-count">D-189</div>
                                 </div>
-                                <div class="ps-task done">
-                                    <div class="check"></div>
-                                    <div class="task-text"><div class="title">수학 모의고사 1회</div><div class="time">오전 9시 — 11시</div></div>
+                                <div class="ps-meal">
+                                    <span class="cap">오늘 급식</span>
+                                    <div class="menu">
+                                        <span>기장밥</span><span>미역국</span><span>제육볶음</span><span>계란찜</span><span>배추김치</span>
+                                    </div>
+                                    <div class="nut">영양정보 · 원산지 보기</div>
                                 </div>
-                                <div class="ps-task done">
-                                    <div class="check"></div>
-                                    <div class="task-text"><div class="title">영단어 200개 암기</div><div class="time">오후 2시</div></div>
+                                <div class="ps-sched">
+                                    <div class="cap">학사일정</div>
+                                    <div class="ps-sched-row"><span class="dt">5/12</span><span class="tx">중간고사 시작</span></div>
+                                    <div class="ps-sched-row"><span class="dt">5/20</span><span class="tx">체육대회</span></div>
                                 </div>
-                                <div class="ps-task">
-                                    <div class="check"></div>
-                                    <div class="task-text"><div class="title">국어 비문학 5지문</div><div class="time">오후 7시</div></div>
+                                <div class="ps-streak">
+                                    <span><span class="t">오늘의 일기</span><span class="s">아직 안 썼어요</span></span>
+                                    <span class="n">12일</span>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
+                <!-- 5. 안전 -->
                 <div class="detail-row">
                     <div class="text-col">
+                        <span class="row-eyebrow">안전</span>
                         <h3>학생만의 공간,<br>안전이 먼저</h3>
-                        <p>가짜 계정·부적절한 콘텐츠는 처음부터 막습니다. 학교 인증으로 진짜 학생만 들어오는 깨끗한 커뮤니티.</p>
+                        <p>가짜 계정과 부적절한 콘텐츠는 처음부터 막습니다. 학생증 확인을 거쳐야 들어올 수 있는 깨끗한 커뮤니티.</p>
                         <ul>
-                            <li>학생증 인증 기반 가입</li>
+                            <li>학생증 제출 후 확인을 거쳐 가입</li>
                             <li>욕설·혐오 표현 자동 필터링</li>
                             <li>한 번의 탭으로 사용자 차단</li>
-                            <li>신고된 콘텐츠 24시간 내 처리</li>
+                            <li>신고 내역을 앱에서 직접 확인</li>
                         </ul>
                     </div>
                     <div class="phone-col">
@@ -518,11 +747,11 @@
                                 <div class="ps-safety-list">
                                     <div class="ps-safety-item">
                                         <div class="ico">✓</div>
-                                        <div class="body"><div class="ttl">학생증 인증 완료</div><div class="desc">진짜 학생만 입장하는 커뮤니티</div></div>
+                                        <div class="body"><div class="ttl">학생증 확인 완료</div><div class="desc">확인을 거친 학생만 입장하는 커뮤니티</div></div>
                                     </div>
                                     <div class="ps-safety-item">
                                         <div class="ico">!</div>
-                                        <div class="body"><div class="ttl">신고 무관용 정책</div><div class="desc">부적절한 콘텐츠는 24시간 내 처리</div></div>
+                                        <div class="body"><div class="ttl">신고 무관용 정책</div><div class="desc">신고 내역과 처리 결과를 앱에서 확인</div></div>
                                     </div>
                                     <div class="ps-safety-item">
                                         <div class="ico">⊘</div>
