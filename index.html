@@ -689,15 +689,15 @@
                             <div class="phone-screen planner">
                                 <div class="ps-status"><span>9:41</span><span>●●●</span></div>
                                 <div class="ps-date">
-                                    <div class="day">5월 6일</div>
-                                    <div class="label">화요일 · 출석 12일째 🔥</div>
+                                    <div class="day" data-mock-day>5월 6일</div>
+                                    <div class="label"><span data-mock-weekday>화요일</span> · 출석 12일째 🔥</div>
                                 </div>
                                 <div class="ps-dday">
                                     <div>
                                         <div class="dday-label">수능</div>
-                                        <div class="dday-title">2026 대학수학능력시험</div>
+                                        <div class="dday-title" data-suneung-title>2027 대학수학능력시험</div>
                                     </div>
-                                    <div class="dday-count">D-189</div>
+                                    <div class="dday-count" data-suneung-dday>D-101</div>
                                 </div>
                                 <div class="ps-meal">
                                     <span class="cap">오늘 급식</span>
@@ -801,8 +801,55 @@
                 <span>주소 경기도 화성시 동탄구 동탄첨단산업1로 27, 108호(영천동, 금강펜테리움 IX타워)</span>
                 <span>이메일 <a href="mailto:claspeek.official@gmail.com">claspeek.official@gmail.com</a></span>
             </div>
-            <div class="copyright">&copy; 2026 Connii. All rights reserved.</div>
+            <div class="copyright">&copy; <span data-year>2026</span> Connii. All rights reserved.</div>
         </div>
     </footer>
+
+<script>
+// 홈 목업과 푸터의 날짜 표기를 실행 시점 기준으로 그린다.
+// 예전에는 "D-189" · "5월 6일" · "2026 대학수학능력시험" 이 HTML 에 박혀 있어
+// 5월에 만든 화면이 그대로 굳었고, 8월에 보면 D-day 가 90일 가까이 틀렸다.
+(function () {
+  var now = new Date();
+
+  // 수능일: 11월 셋째 주 목요일. 교육부가 예외적으로 옮기면 아래 OVERRIDES 에 적는다.
+  // (키는 시행 연도, 값은 'YYYY-MM-DD')
+  var OVERRIDES = {};
+
+  function thirdThursdayOfNovember(year) {
+    var d = new Date(year, 10, 1);
+    var offset = (4 - d.getDay() + 7) % 7; // 4 = 목요일
+    return new Date(year, 10, 1 + offset + 14);
+  }
+
+  function suneungDate(year) {
+    var override = OVERRIDES[year];
+    return override ? new Date(override + 'T00:00:00') : thirdThursdayOfNovember(year);
+  }
+
+  var today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  var exam = suneungDate(today.getFullYear());
+  if (exam < today) exam = suneungDate(today.getFullYear() + 1);
+
+  var dday = Math.round((exam - today) / 86400000);
+  // 수능 학년도는 시행 연도 + 1 (2026-11 시행 = 2027학년도).
+  var admissionYear = exam.getFullYear() + 1;
+
+  var WEEKDAYS = ['일', '월', '화', '수', '목', '금', '토'];
+  function setText(selector, text) {
+    var el = document.querySelector(selector);
+    if (el) el.textContent = text;
+  }
+
+  setText('[data-mock-day]', (today.getMonth() + 1) + '월 ' + today.getDate() + '일');
+  setText('[data-mock-weekday]', WEEKDAYS[today.getDay()] + '요일');
+  setText('[data-suneung-title]', admissionYear + ' 대학수학능력시험');
+  setText('[data-suneung-dday]', dday === 0 ? 'D-DAY' : 'D-' + dday);
+
+  Array.prototype.forEach.call(document.querySelectorAll('[data-year]'), function (el) {
+    el.textContent = String(now.getFullYear());
+  });
+})();
+</script>
 </body>
 </html>

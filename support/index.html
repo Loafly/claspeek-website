@@ -121,8 +121,18 @@
                 <span>주소 경기도 화성시 동탄구 동탄첨단산업1로 27, 108호(영천동, 금강펜테리움 IX타워)</span>
                 <span>이메일 <a href="mailto:claspeek.official@gmail.com">claspeek.official@gmail.com</a></span>
             </div>
-            &copy; 2026 Connii. All rights reserved.
+            &copy; <span data-year>2026</span> Connii. All rights reserved.
         </footer>
     </div>
+
+<script>
+// 저작권 연도는 실행 시점 기준으로 그린다 (해가 바뀌어도 손대지 않도록).
+(function () {
+  var year = String(new Date().getFullYear());
+  Array.prototype.forEach.call(document.querySelectorAll('[data-year]'), function (el) {
+    el.textContent = year;
+  });
+})();
+</script>
 </body>
 </html>
