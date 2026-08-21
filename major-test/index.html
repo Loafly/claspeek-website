@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>나에게 맞는 학과는? - Claspeek 학과 성향 테스트</title>
+    <meta name="description" content="12개 질문으로 알아보는 나의 학과 성향. 친구들과 결과를 비교해보세요!">
+    <link rel="canonical" href="https://www.claspeek.com/major-test/">
+    <meta name="theme-color" content="#7C3AED">
+    <link rel="icon" type="image/png" href="/assets/app-icon.png">
+    <link rel="apple-touch-icon" href="/assets/app-icon.png">
+    <meta property="og:title" content="나에게 맞는 학과는? 🎓">
+    <meta property="og:description" content="12개 질문으로 알아보는 나의 학과 성향 테스트. 3분이면 끝! 친구들과 결과를 비교해보세요.">
+    <meta property="og:image" content="https://www.claspeek.com/assets/app-icon.png">
+    <meta property="og:url" content="https://www.claspeek.com/major-test/">
+    <meta property="og:type" content="website">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --brand: #7C3AED;
+            --brand-soft: #EDE9FE;
+            --brand-deep: #5B21B6;
+            --ink: #1F1633;
+            --ink-2: #6B6480;
+            --bg: #F6F3FF;
+            --card: #FFFFFF;
+            --line: #E8E2F7;
+        }
+        html { -webkit-text-size-adjust: 100%; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Apple SD Gothic Neo', Roboto, sans-serif;
+            color: var(--ink);
+            background: var(--bg);
+            background-image: radial-gradient(circle at 15% 10%, rgba(124,58,237,.10), transparent 45%),
+                              radial-gradient(circle at 85% 90%, rgba(236,72,153,.08), transparent 45%);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+        .wrap { max-width: 480px; margin: 0 auto; padding: 20px 20px 56px; }
+        .top { display: flex; align-items: center; justify-content: space-between; padding: 4px 0 20px; }
+        .top a { display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 15px; color: var(--ink); text-decoration: none; }
+        .top img { border-radius: 7px; }
+        .screen { display: none; }
+        .screen.active { display: block; animation: fade .3s ease; }
+        @keyframes fade { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+        @media (prefers-reduced-motion: reduce) { .screen.active { animation: none; } }
+
+        .card { background: var(--card); border: 1px solid var(--line); border-radius: 20px; padding: 28px 24px; box-shadow: 0 6px 24px rgba(80,40,160,.07); }
+        .card + .card { margin-top: 16px; }
+
+        .btn {
+            display: block; width: 100%; border: 0; cursor: pointer; text-align: center; text-decoration: none;
+            background: var(--brand); color: #fff; font-size: 16px; font-weight: 700;
+            padding: 15px 18px; border-radius: 14px; transition: transform .1s, background .15s;
+            font-family: inherit;
+        }
+        .btn:active { transform: scale(.98); }
+        .btn:hover { background: var(--brand-deep); }
+        .btn.ghost { background: #fff; color: var(--brand); border: 1.5px solid var(--brand); }
+        .btn.ghost:hover { background: var(--brand-soft); }
+        .btn:focus-visible, .opt:focus-visible, input:focus-visible { outline: 3px solid rgba(124,58,237,.45); outline-offset: 2px; }
+        .btn + .btn { margin-top: 10px; }
+        .btn[disabled] { opacity: .5; cursor: default; }
+
+        /* intro */
+        .hero { text-align: center; padding: 8px 0 4px; }
+        .hero .emoji { font-size: 64px; line-height: 1.2; }
+        .hero h1 { font-size: 26px; font-weight: 800; margin: 12px 0 8px; letter-spacing: -.5px; text-wrap: balance; }
+        .hero p { color: var(--ink-2); font-size: 15px; }
+        .hero .meta { display: flex; justify-content: center; gap: 14px; margin: 18px 0 22px; font-size: 13px; color: var(--ink-2); }
+        .hero .meta span { background: #fff; border: 1px solid var(--line); border-radius: 999px; padding: 5px 12px; }
+        .invite-banner {
+            display: none; align-items: center; gap: 10px; background: var(--brand-soft); border: 1px solid #DDD1FA;
+            border-radius: 14px; padding: 12px 14px; margin-bottom: 16px; font-size: 14px; color: var(--brand-deep);
+        }
+        .invite-banner .ib-emoji { font-size: 22px; }
+
+        /* quiz */
+        .progress { height: 8px; background: #E5DEF8; border-radius: 999px; overflow: hidden; margin-bottom: 8px; }
+        .progress i { display: block; height: 100%; width: 0; background: linear-gradient(90deg, #8B5CF6, #D946EF); border-radius: 999px; transition: width .25s ease; }
+        .q-count { font-size: 13px; font-weight: 700; color: var(--brand); margin-bottom: 18px; }
+        .q-text { font-size: 20px; font-weight: 800; letter-spacing: -.4px; margin-bottom: 20px; text-wrap: balance; }
+        .opt {
+            display: block; width: 100%; text-align: left; cursor: pointer; font-family: inherit;
+            background: #fff; border: 1.5px solid var(--line); border-radius: 14px;
+            padding: 14px 16px; font-size: 15px; color: var(--ink); margin-bottom: 10px; transition: border-color .12s, background .12s;
+        }
+        .opt:hover { border-color: var(--brand); background: #FBFAFF; }
+        .opt:active { background: var(--brand-soft); }
+        .q-back { background: none; border: 0; cursor: pointer; color: var(--ink-2); font-size: 14px; padding: 10px 0 0; font-family: inherit; }
+        .q-back:hover { color: var(--ink); }
+
+        /* result */
+        .r-card { text-align: center; background: linear-gradient(160deg, #fff 60%, var(--brand-soft)); }
+        .r-label { display: inline-block; font-size: 12px; font-weight: 700; color: var(--brand); background: var(--brand-soft); border-radius: 999px; padding: 4px 12px; letter-spacing: .5px; }
+        .r-emoji { font-size: 72px; line-height: 1.3; margin-top: 10px; }
+        .r-name { font-size: 26px; font-weight: 800; letter-spacing: -.5px; }
+        .r-track { font-size: 14px; font-weight: 700; color: var(--brand-deep); margin: 2px 0 14px; }
+        .r-desc { font-size: 15px; color: var(--ink-2); text-align: left; background: #ffffffAA; border-radius: 12px; padding: 14px 16px; }
+        .r-tags { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin-top: 14px; }
+        .r-tags span { font-size: 13px; font-weight: 600; color: var(--brand-deep); background: #fff; border: 1px solid var(--line); border-radius: 999px; padding: 5px 11px; }
+        .sec-title { font-size: 15px; font-weight: 800; margin-bottom: 12px; display: flex; align-items: center; gap: 6px; }
+        .majors { display: flex; flex-wrap: wrap; gap: 8px; }
+        .majors span { font-size: 14px; font-weight: 600; background: var(--brand-soft); color: var(--brand-deep); border-radius: 10px; padding: 8px 12px; }
+        .sub-row { display: flex; align-items: center; gap: 10px; margin-top: 14px; padding-top: 14px; border-top: 1px dashed var(--line); font-size: 14px; color: var(--ink-2); }
+        .sub-row b { color: var(--ink); }
+
+        .nick-row { display: flex; gap: 8px; margin-top: 4px; }
+        .nick-row input {
+            flex: 1; min-width: 0; border: 1.5px solid var(--line); border-radius: 12px; padding: 12px 14px;
+            font-size: 15px; font-family: inherit; color: var(--ink); background: #fff;
+        }
+        .nick-row input::placeholder { color: #B4ACC9; }
+        .nick-row .btn { width: auto; padding: 12px 18px; font-size: 15px; }
+        .hint { font-size: 12.5px; color: var(--ink-2); margin-top: 10px; }
+        .share-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 14px; }
+        .share-btns .btn { margin: 0; font-size: 15px; padding: 13px 10px; }
+        .toast {
+            position: fixed; left: 50%; bottom: 28px; transform: translateX(-50%) translateY(80px);
+            background: var(--ink); color: #fff; font-size: 14px; padding: 11px 18px; border-radius: 999px;
+            opacity: 0; transition: all .25s ease; pointer-events: none; white-space: nowrap; z-index: 10;
+        }
+        .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+        .friends-empty { font-size: 14px; color: var(--ink-2); text-align: center; padding: 10px 0 4px; }
+        .friend-row { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 1px solid #F1EDFB; }
+        .friend-row:last-child { border-bottom: 0; }
+        .friend-row .f-emoji { font-size: 26px; }
+        .friend-row .f-name { font-weight: 700; font-size: 15px; }
+        .friend-row .f-type { font-size: 13px; color: var(--ink-2); }
+        .friend-row .f-badge { margin-left: auto; font-size: 12px; font-weight: 700; color: var(--brand-deep); background: var(--brand-soft); border-radius: 999px; padding: 4px 10px; white-space: nowrap; }
+        .friends-summary { font-size: 14px; color: var(--ink-2); margin-bottom: 8px; }
+        .refresh { background: none; border: 0; cursor: pointer; color: var(--brand); font-size: 13px; font-weight: 700; margin-left: auto; font-family: inherit; }
+
+        .compare { display: flex; align-items: center; justify-content: center; gap: 14px; }
+        .compare .c-col { text-align: center; }
+        .compare .c-col .ce { font-size: 40px; }
+        .compare .c-col .cn { font-size: 13px; font-weight: 700; margin-top: 2px; }
+        .compare .vs { font-size: 13px; font-weight: 800; color: var(--ink-2); }
+        .compare-note { text-align: center; font-size: 13.5px; color: var(--brand-deep); background: var(--brand-soft); border-radius: 10px; padding: 8px 12px; margin-top: 14px; }
+
+        .cta-card { background: linear-gradient(135deg, #7C3AED, #A855F7); color: #fff; border: 0; }
+        .cta-card .sec-title { color: #fff; }
+        .cta-card p { font-size: 14px; opacity: .92; margin-bottom: 14px; }
+        .cta-card .btn { background: #fff; color: var(--brand-deep); }
+        .cta-card .btn:hover { background: var(--brand-soft); }
+
+        footer { text-align: center; margin-top: 32px; font-size: 12.5px; color: #A79FBF; }
+        footer a { color: inherit; }
+    </style>
+</head>
+<body>
+    <div class="wrap">
+        <div class="top">
+            <a href="/"><img src="/assets/app-icon.png" alt="" width="26" height="26">Claspeek</a>
+        </div>
+
+        <!-- 인트로 -->
+        <section id="screen-intro" class="screen active">
+            <div id="invite-banner" class="invite-banner">
+                <span class="ib-emoji">💌</span>
+                <span id="invite-text">친구가 초대장을 보냈어요! 테스트하고 결과를 비교해보세요.</span>
+            </div>
+            <div class="card">
+                <div class="hero">
+                    <div class="emoji">🎓</div>
+                    <h1>나에게 맞는 학과는?</h1>
+                    <p>12개 질문으로 알아보는 나의 학과 성향.<br>친구들과 결과를 비교해보세요!</p>
+                    <div class="meta"><span>⏱ 3분 소요</span><span>🔒 로그인 불필요</span></div>
+                    <button class="btn" id="btn-start">테스트 시작하기</button>
+                    <button class="btn ghost" id="btn-my-result" style="display:none">내 결과 다시 보기</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- 퀴즈 -->
+        <section id="screen-quiz" class="screen">
+            <div class="progress"><i id="progress-bar"></i></div>
+            <div class="q-count" id="q-count"></div>
+            <div class="card">
+                <div class="q-text" id="q-text"></div>
+                <div id="q-options"></div>
+                <button class="q-back" id="btn-back" style="display:none">&larr; 이전 질문</button>
+            </div>
+        </section>
+
+        <!-- 결과 -->
+        <section id="screen-result" class="screen">
+            <div class="card r-card">
+                <span class="r-label">나의 학과 성향</span>
+                <div class="r-emoji" id="r-emoji"></div>
+                <div class="r-name" id="r-name"></div>
+                <div class="r-track" id="r-track"></div>
+                <div class="r-desc" id="r-desc"></div>
+                <div class="r-tags" id="r-tags"></div>
+                <div class="sub-row" id="sub-row" style="display:none"></div>
+            </div>
+
+            <div class="card" id="compare-card" style="display:none">
+                <div class="sec-title">👀 초대한 친구와 비교</div>
+                <div class="compare" id="compare-body"></div>
+                <div class="compare-note" id="compare-note" style="display:none"></div>
+            </div>
+
+            <div class="card">
+                <div class="sec-title">🎯 이런 학과가 잘 맞아요</div>
+                <div class="majors" id="r-majors"></div>
+            </div>
+
+            <div class="card" id="save-card">
+                <div class="sec-title">🔗 내 결과 공유하기</div>
+                <div id="save-form">
+                    <div class="nick-row">
+                        <input id="nickname" type="text" maxlength="12" placeholder="닉네임 (선택)" autocomplete="off">
+                        <button class="btn" id="btn-save">링크 만들기</button>
+                    </div>
+                    <div class="hint">링크로 들어온 친구가 테스트하면, 친구의 결과가 아래에 모여요.</div>
+                </div>
+                <div id="share-actions" style="display:none">
+                    <div class="share-btns">
+                        <button class="btn" id="btn-share">공유하기</button>
+                        <button class="btn ghost" id="btn-copy">링크 복사</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card" id="friends-card" style="display:none">
+                <div class="sec-title">👥 함께한 친구들 <button class="refresh" id="btn-refresh">새로고침</button></div>
+                <div class="friends-summary" id="friends-summary" style="display:none"></div>
+                <div id="friends-list"><div class="friends-empty">아직 아무도 없어요. 링크를 공유해보세요! 🚀</div></div>
+            </div>
+
+            <div class="card cta-card">
+                <div class="sec-title">📊 이 학과, 실제 경쟁률은?</div>
+                <p>Claspeek 앱에서 대학별 경쟁률·입결 등급과 재학생 커뮤니티를 확인해보세요.</p>
+                <a class="btn" id="btn-app" href="https://www.claspeek.com/">Claspeek 앱 받기</a>
+            </div>
+
+            <button class="btn ghost" id="btn-retry" style="margin-top:16px">테스트 다시 하기</button>
+        </section>
+
+        <footer>
+            <a href="/">Claspeek</a> · 결과는 재미로 봐주세요! 닉네임 외 개인정보는 저장되지 않아요.
+        </footer>
+    </div>
+    <div class="toast" id="toast"></div>
+
+    <script>
+    'use strict';
+
+    // ===== 상수 =====
+    var API = (location.hostname === 'localhost' || location.hostname === '127.0.0.1')
+        ? 'http://localhost:8080' : 'https://api.claspeek.com';
+    var STORAGE_KEY = 'cspk_major_test';
+    var IOS_STORE = 'https://apps.apple.com/app/id6761687904';
+    var ANDROID_STORE = 'https://play.google.com/store/apps/details?id=com.claspeek.app';
+
+    // ===== 유형 데이터 (H:인문 S:사회 N:자연 E:공학 M:의약 A:예체능 D:교육) =====
+    var TYPES = {
+        HUMANITIES: {
+            emoji: '📚', name: '이야기 수집가', track: '인문 계열',
+            desc: '세상을 텍스트와 맥락으로 읽는 타입이에요. 남들이 지나치는 문장 하나, 역사 한 줄에서 의미를 발견하고, "왜?"라는 질문을 끝까지 파고드는 깊이가 무기예요.',
+            tags: ['#문장수집', '#과몰입장인', '#깊이파기'],
+            majors: ['국어국문학과', '사학과', '철학과', '문예창작학과', '언어학과'],
+            match: 'ARTS_SPORTS', matchNote: '감각 폭발형과 만나면 스토리에 색이 입혀지는 환상의 콤비!'
+        },
+        SOCIAL: {
+            emoji: '⚖️', name: '세상 설계자', track: '사회 계열',
+            desc: '사람과 세상이 돌아가는 원리에 촉이 좋은 타입이에요. 흐름을 읽고 판을 짜는 데 재능이 있어서, 어디서든 "쟤 리더 하자"는 말을 듣는 편이에요.',
+            tags: ['#판짜기고수', '#흐름읽기', '#설득력만렙'],
+            majors: ['경영학과', '심리학과', '미디어커뮤니케이션학과', '정치외교학과', '경제학과'],
+            match: 'ENGINEERING', matchNote: '집요한 메이커와 만나면 기획×구현, 창업해도 되는 조합!'
+        },
+        NATURAL: {
+            emoji: '🔬', name: '원리 탐정', track: '자연 계열',
+            desc: '"그게 어떻게 되는 건데?"가 입에 붙은 타입이에요. 겉모습보다 그 밑의 원리와 구조가 궁금하고, 남들이 외울 때 혼자 증명하고 있는 사람이에요.',
+            tags: ['#원리집착', '#팩트체크', '#관찰력만렙'],
+            majors: ['수학과', '물리학과', '화학과', '생명과학과', '통계학과'],
+            match: 'MEDICAL', matchNote: '사람 살리는 손과 만나면 연구실 최강 듀오!'
+        },
+        ENGINEERING: {
+            emoji: '🛠️', name: '집요한 메이커', track: '공학 계열',
+            desc: '머릿속 아이디어를 진짜로 만들어내는 타입이에요. "이거 더 편하게 안 되나?"가 인생 질문이고, 한번 꽂히면 밤새는 줄 모르는 몰입러예요.',
+            tags: ['#만들다밤샘', '#효율덕후', '#문제해결사'],
+            majors: ['컴퓨터공학과', '기계공학과', '전자공학과', '화학공학과', '산업공학과'],
+            match: 'SOCIAL', matchNote: '세상 설계자와 만나면 기획×구현, 창업해도 되는 조합!'
+        },
+        MEDICAL: {
+            emoji: '🩺', name: '사람 살리는 손', track: '의약·보건 계열',
+            desc: '위기의 순간 제일 침착해지는 타입이에요. 누군가를 돌보고 회복시키는 일에서 보람을 느끼고, 꼼꼼함과 따뜻함을 동시에 가진 흔치 않은 조합이에요.',
+            tags: ['#침착의아이콘', '#꼼꼼함', '#힐러본능'],
+            majors: ['간호학과', '약학과', '물리치료학과', '임상병리학과', '수의예과'],
+            match: 'NATURAL', matchNote: '원리 탐정과 만나면 연구실 최강 듀오!'
+        },
+        ARTS_SPORTS: {
+            emoji: '🎨', name: '감각 폭발형', track: '예체능 계열',
+            desc: '느낌과 표현으로 세상과 소통하는 타입이에요. 남들이 못 보는 색과 리듬을 캐치하고, 정해진 답보다 나만의 답을 만드는 게 즐거운 사람이에요.',
+            tags: ['#심미안', '#표현본능', '#무대체질'],
+            majors: ['시각디자인학과', '실용음악학과', '체육학과', '연극영화학과', '공간디자인학과'],
+            match: 'HUMANITIES', matchNote: '이야기 수집가와 만나면 스토리에 색이 입혀지는 환상의 콤비!'
+        },
+        EDUCATION: {
+            emoji: '🌱', name: '성장 조력자', track: '교육 계열',
+            desc: '누가 뭘 이해 못 하면 그냥 못 지나치는 타입이에요. 설명 한 번으로 친구 성적을 올려본 적 있다면 바로 당신! 사람이 성장하는 순간을 제일 좋아해요.',
+            tags: ['#설명장인', '#인내심만렙', '#선한영향력'],
+            majors: ['초등교육과', '국어교육과', '수학교육과', '유아교육과', '상담심리학과'],
+            match: 'SOCIAL', matchNote: '세상 설계자와 만나면 사람을 움직이는 콤비!'
+        }
+    };
+    var TYPE_KEYS = ['HUMANITIES', 'SOCIAL', 'NATURAL', 'ENGINEERING', 'MEDICAL', 'ARTS_SPORTS', 'EDUCATION'];
+
+    // ===== 문항 (w: 유형별 가중치) =====
+    var QUESTIONS = [
+        { q: '갑자기 자유 시간이 생겼다! 뭐부터 할까?', o: [
+            { t: '밀린 웹툰·소설·영화 정주행 📖', w: { HUMANITIES: 2, ARTS_SPORTS: 1 } },
+            { t: '친구들 불러서 수다·근황 토크 ☕', w: { SOCIAL: 2, EDUCATION: 1 } },
+            { t: '궁금했던 주제 유튜브·다큐로 파기 🔍', w: { NATURAL: 2, HUMANITIES: 1 } },
+            { t: '방 꾸미기, 뭔가 만들거나 조립하기 🔧', w: { ENGINEERING: 2, ARTS_SPORTS: 1 } }
+        ]},
+        { q: '팀플에서 나의 포지션은?', o: [
+            { t: '아이디어 내고 스토리 짜는 기획 담당 💡', w: { HUMANITIES: 2, ARTS_SPORTS: 1 } },
+            { t: '일정 정리하고 역할 나누는 리더 📋', w: { SOCIAL: 2, EDUCATION: 1 } },
+            { t: '자료 조사하고 팩트 검증하는 담당 🧐', w: { NATURAL: 2, SOCIAL: 1 } },
+            { t: 'PPT·영상 뚝딱 만드는 제작 담당 🖥️', w: { ENGINEERING: 2, ARTS_SPORTS: 1 } }
+        ]},
+        { q: '시험 공부할 때 나는 어떤 스타일?', o: [
+            { t: '개념을 이야기처럼 이해해야 외워짐', w: { HUMANITIES: 2, EDUCATION: 1 } },
+            { t: '친구들이랑 스터디하며 서로 설명해줌', w: { EDUCATION: 2, SOCIAL: 1 } },
+            { t: '원리를 이해 못 하면 못 넘어감', w: { NATURAL: 2, ENGINEERING: 1 } },
+            { t: '기출 유형 분석해서 효율적으로 공략', w: { ENGINEERING: 2, NATURAL: 1 } }
+        ]},
+        { q: '내 유튜브 알고리즘에 제일 자주 뜨는 건?', o: [
+            { t: '역사·인문학·책 리뷰 📜', w: { HUMANITIES: 2 } },
+            { t: '시사·경제·자기계발 브이로그 💼', w: { SOCIAL: 2 } },
+            { t: '과학 실험·우주·의학 다큐 🧪', w: { NATURAL: 2, MEDICAL: 1 } },
+            { t: '그림·음악·운동·댄스 🎧', w: { ARTS_SPORTS: 2 } }
+        ]},
+        { q: '친구가 고민 상담을 해오면 나는?', o: [
+            { t: '끝까지 들어주고 마음에 공감해줌 🫂', w: { MEDICAL: 2, EDUCATION: 1 } },
+            { t: '상황을 정리해주고 현실적인 해결책 제시', w: { SOCIAL: 2, ENGINEERING: 1 } },
+            { t: '비슷한 사례나 와닿는 글귀를 찾아 건네줌', w: { HUMANITIES: 2 } },
+            { t: '"맛있는 거 먹으러 가자" 기분 전환 담당 🍜', w: { ARTS_SPORTS: 2, SOCIAL: 1 } }
+        ]},
+        { q: '길에서 누가 쓰러졌다! 나의 첫 반응은?', o: [
+            { t: '바로 달려가 상태 확인하고 119 신고 🚑', w: { MEDICAL: 2 } },
+            { t: '주변에 도움을 요청하고 상황을 정리함', w: { SOCIAL: 2, EDUCATION: 1 } },
+            { t: '배웠던 응급처치 방법을 빠르게 떠올림', w: { MEDICAL: 2, NATURAL: 1 } },
+            { t: '구급차가 들어올 길부터 확보함', w: { ENGINEERING: 2, SOCIAL: 1 } }
+        ]},
+        { q: '새 학기, 동아리를 하나 고른다면?', o: [
+            { t: '밴드·댄스·미술 같은 예술 동아리 🎸', w: { ARTS_SPORTS: 2 } },
+            { t: '봉사·또래 멘토링 동아리 🤝', w: { EDUCATION: 2, MEDICAL: 1 } },
+            { t: '코딩·로봇·발명 동아리 🤖', w: { ENGINEERING: 2, NATURAL: 1 } },
+            { t: '토론·신문·모의UN 동아리 🎤', w: { SOCIAL: 2, HUMANITIES: 1 } }
+        ]},
+        { q: '수업 중 제일 설레는 순간은?', o: [
+            { t: '소설·시를 읽고 해석을 나눌 때', w: { HUMANITIES: 2, EDUCATION: 1 } },
+            { t: '실험하고 결과를 관찰할 때', w: { NATURAL: 2, MEDICAL: 1 } },
+            { t: '자유 주제로 발표·토론할 때', w: { SOCIAL: 2 } },
+            { t: '체육·미술·음악 시간이 시작될 때', w: { ARTS_SPORTS: 2 } }
+        ]},
+        { q: '미래의 나, 어떤 모습이면 제일 뿌듯할까?', o: [
+            { t: '내 이름이 새겨진 책이나 작품 ✍️', w: { HUMANITIES: 2, ARTS_SPORTS: 1 } },
+            { t: '아픈 사람을 낫게 하는 전문가 ⚕️', w: { MEDICAL: 2 } },
+            { t: '세상을 편하게 만드는 기술의 개발자 🚀', w: { ENGINEERING: 2, NATURAL: 1 } },
+            { t: '누군가의 인생을 바꾼 선생님 🍎', w: { EDUCATION: 2 } }
+        ]},
+        { q: '문제가 도저히 안 풀릴 때 나는?', o: [
+            { t: '될 때까지 붙잡고 끝까지 파고든다', w: { NATURAL: 2, ENGINEERING: 1 } },
+            { t: '잘 아는 사람을 찾아가 물어본다', w: { SOCIAL: 2, EDUCATION: 1 } },
+            { t: '일단 쉬면서 감이 올 때까지 기다린다', w: { ARTS_SPORTS: 2, HUMANITIES: 1 } },
+            { t: '다른 방법이나 도구를 찾아 우회한다', w: { ENGINEERING: 2, SOCIAL: 1 } }
+        ]},
+        { q: '들으면 제일 기분 좋은 칭찬은?', o: [
+            { t: '"글 진짜 잘 쓴다, 말도 예쁘게 해"', w: { HUMANITIES: 2 } },
+            { t: '"똑똑하다, 어떻게 그런 생각을 해?"', w: { NATURAL: 2 } },
+            { t: '"너 덕분에 살았다, 진짜 고마워"', w: { MEDICAL: 2, EDUCATION: 1 } },
+            { t: '"센스 미쳤다! 이거 네가 만든 거야?"', w: { ARTS_SPORTS: 2, ENGINEERING: 1 } }
+        ]},
+        { q: '10년 후 내 책상 위에 있을 것 같은 물건은?', o: [
+            { t: '손때 묻은 책과 만년필 🖋️', w: { HUMANITIES: 2 } },
+            { t: '명함첩과 일정 가득한 플래너 🗓️', w: { SOCIAL: 2 } },
+            { t: '최신 장비와 듀얼 모니터 🖥️', w: { ENGINEERING: 2, NATURAL: 1 } },
+            { t: '아이들 사진과 감사 편지 💌', w: { EDUCATION: 2, MEDICAL: 1 } }
+        ]}
+    ];
+
+    // ===== 상태 =====
+    var currentQ = 0;
+    var answers = [];          // 각 문항의 선택 index
+    var myType = null, mySub = null;
+    var refCode = null;        // 초대 링크로 들어온 경우
+    var inviter = null;        // 초대한 사람의 결과 (GET 응답의 me)
+    var saved = loadSaved();
+
+    // ===== 헬퍼 =====
+    function $(id) { return document.getElementById(id); }
+    function show(id) {
+        var screens = document.querySelectorAll('.screen');
+        for (var i = 0; i < screens.length; i++) screens[i].classList.remove('active');
+        $(id).classList.add('active');
+        window.scrollTo(0, 0);
+    }
+    function toast(msg) {
+        var el = $('toast');
+        el.textContent = msg;
+        el.classList.add('show');
+        clearTimeout(el._t);
+        el._t = setTimeout(function () { el.classList.remove('show'); }, 2200);
+    }
+    function loadSaved() {
+        try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || null; } catch (e) { return null; }
+    }
+    function persist(data) {
+        try { localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); } catch (e) { /* 사생활 모드 등 */ }
+    }
+    function shareUrl(code) {
+        return 'https://www.claspeek.com/major-test/?ref=' + encodeURIComponent(code);
+    }
+    function api(path, options) {
+        return fetch(API + path, options).then(function (res) {
+            if (!res.ok) throw new Error('HTTP ' + res.status);
+            return res.json();
+        });
+    }
+
+    // ===== 인트로 =====
+    function initIntro() {
+        var params = new URLSearchParams(location.search);
+        var ref = params.get('ref');
+        if (ref && /^[A-Za-z0-9]{1,12}$/.test(ref)) {
+            refCode = ref;
+            api('/v1/major-tests/results/' + encodeURIComponent(ref))
+                .then(function (group) {
+                    inviter = group.me;
+                    var t = TYPES[inviter.resultType];
+                    var who = inviter.nickname ? inviter.nickname + '님' : '친구';
+                    $('invite-text').textContent = who + '(' + (t ? t.emoji + ' ' + t.name : '') + ')이 초대장을 보냈어요! 테스트하고 결과를 비교해보세요.';
+                    $('invite-banner').style.display = 'flex';
+                })
+                .catch(function () { /* 깨진 링크여도 테스트는 진행 가능 */ });
+        }
+        if (saved && saved.code) {
+            $('btn-my-result').style.display = 'block';
+        }
+    }
+
+    // ===== 퀴즈 =====
+    function startQuiz() {
+        currentQ = 0;
+        answers = [];
+        renderQuestion();
+        show('screen-quiz');
+    }
+    function renderQuestion() {
+        var item = QUESTIONS[currentQ];
+        $('progress-bar').style.width = Math.round((currentQ / QUESTIONS.length) * 100) + '%';
+        $('q-count').textContent = 'Q' + (currentQ + 1) + ' / ' + QUESTIONS.length;
+        $('q-text').textContent = item.q;
+        var box = $('q-options');
+        box.innerHTML = '';
+        item.o.forEach(function (opt, idx) {
+            var btn = document.createElement('button');
+            btn.className = 'opt';
+            btn.type = 'button';
+            btn.textContent = opt.t;
+            btn.addEventListener('click', function () { pick(idx); });
+            box.appendChild(btn);
+        });
+        $('btn-back').style.display = currentQ > 0 ? 'inline' : 'none';
+    }
+    function pick(idx) {
+        answers[currentQ] = idx;
+        if (currentQ < QUESTIONS.length - 1) {
+            currentQ++;
+            renderQuestion();
+        } else {
+            finishQuiz();
+        }
+    }
+    function finishQuiz() {
+        var scores = {};
+        TYPE_KEYS.forEach(function (k) { scores[k] = 0; });
+        answers.forEach(function (optIdx, qIdx) {
+            var w = QUESTIONS[qIdx].o[optIdx].w;
+            Object.keys(w).forEach(function (k) { scores[k] += w[k]; });
+        });
+        var sorted = TYPE_KEYS.slice().sort(function (a, b) { return scores[b] - scores[a]; });
+        myType = sorted[0];
+        mySub = scores[sorted[1]] > 0 ? sorted[1] : null;
+        renderResult(myType, mySub, false);
+        show('screen-result');
+    }
+
+    // ===== 결과 =====
+    function renderResult(typeKey, subKey, isSavedResult) {
+        var t = TYPES[typeKey];
+        $('r-emoji').textContent = t.emoji;
+        $('r-name').textContent = t.name;
+        $('r-track').textContent = t.track;
+        $('r-desc').textContent = t.desc;
+        var tags = $('r-tags');
+        tags.innerHTML = '';
+        t.tags.forEach(function (tag) {
+            var s = document.createElement('span');
+            s.textContent = tag;
+            tags.appendChild(s);
+        });
+        var subRow = $('sub-row');
+        if (subKey && TYPES[subKey]) {
+            var st = TYPES[subKey];
+            subRow.innerHTML = '';
+            var label = document.createElement('span');
+            label.textContent = '서브 성향 ';
+            var b = document.createElement('b');
+            b.textContent = st.emoji + ' ' + st.name + ' (' + st.track + ')';
+            subRow.appendChild(label);
+            subRow.appendChild(b);
+            subRow.style.display = 'flex';
+        } else {
+            subRow.style.display = 'none';
+        }
+        var majors = $('r-majors');
+        majors.innerHTML = '';
+        t.majors.forEach(function (m) {
+            var s = document.createElement('span');
+            s.textContent = m;
+            majors.appendChild(s);
+        });
+        renderCompare(typeKey);
+        if (isSavedResult && saved && saved.code) {
+            $('save-form').style.display = 'none';
+            $('share-actions').style.display = 'block';
+            $('friends-card').style.display = 'block';
+            loadFriends(saved.code);
+        } else {
+            $('save-form').style.display = 'block';
+            $('share-actions').style.display = 'none';
+            $('friends-card').style.display = 'none';
+        }
+    }
+    function renderCompare(typeKey) {
+        var card = $('compare-card');
+        if (!inviter || !TYPES[inviter.resultType]) { card.style.display = 'none'; return; }
+        var mine = TYPES[typeKey];
+        var theirs = TYPES[inviter.resultType];
+        var who = inviter.nickname || '친구';
+        var body = $('compare-body');
+        body.innerHTML = '';
+        [[mine, '나'], [theirs, who]].forEach(function (pair, i) {
+            if (i === 1) {
+                var vs = document.createElement('div');
+                vs.className = 'vs';
+                vs.textContent = 'VS';
+                body.appendChild(vs);
+            }
+            var col = document.createElement('div');
+            col.className = 'c-col';
+            var ce = document.createElement('div');
+            ce.className = 'ce';
+            ce.textContent = pair[0].emoji;
+            var cn = document.createElement('div');
+            cn.className = 'cn';
+            cn.textContent = pair[1] + ' · ' + pair[0].name;
+            col.appendChild(ce);
+            col.appendChild(cn);
+            body.appendChild(col);
+        });
+        var note = $('compare-note');
+        if (typeKey === inviter.resultType) {
+            note.textContent = '둘이 완전 같은 유형! 통했다 🎉';
+            note.style.display = 'block';
+        } else if (mine.match === inviter.resultType) {
+            note.textContent = '궁합 최고! ' + mine.matchNote;
+            note.style.display = 'block';
+        } else {
+            note.style.display = 'none';
+        }
+        card.style.display = 'block';
+    }
+
+    // ===== 저장 + 공유 =====
+    function saveResult() {
+        var btn = $('btn-save');
+        btn.disabled = true;
+        btn.textContent = '만드는 중…';
+        var nickname = $('nickname').value.trim().slice(0, 12);
+        api('/v1/major-tests/results', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                resultType: myType,
+                subType: mySub,
+                nickname: nickname || null,
+                refCode: refCode
+            })
+        }).then(function (res) {
+            saved = { code: res.code, resultType: myType, subType: mySub, nickname: nickname || null };
+            persist(saved);
+            $('save-form').style.display = 'none';
+            $('share-actions').style.display = 'block';
+            $('friends-card').style.display = 'block';
+            loadFriends(saved.code);
+            toast('공유 링크가 만들어졌어요!');
+        }).catch(function () {
+            toast('잠시 후 다시 시도해주세요 🙏');
+        }).finally(function () {
+            btn.disabled = false;
+            btn.textContent = '링크 만들기';
+        });
+    }
+    function doShare() {
+        var url = shareUrl(saved.code);
+        var t = TYPES[saved.resultType];
+        var text = '나의 학과 성향은 ' + t.emoji + ' ' + t.name + ' (' + t.track + ')! 너는 뭐가 나올까?';
+        if (navigator.share) {
+            navigator.share({ title: '나에게 맞는 학과는?', text: text, url: url }).catch(function () {});
+        } else {
+            copyLink();
+        }
+    }
+    function copyLink() {
+        var url = shareUrl(saved.code);
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(url).then(function () { toast('링크가 복사되었어요!'); })
+                .catch(function () { fallbackCopy(url); });
+        } else {
+            fallbackCopy(url);
+        }
+    }
+    function fallbackCopy(url) {
+        var input = document.createElement('input');
+        input.value = url;
+        document.body.appendChild(input);
+        input.select();
+        try { document.execCommand('copy'); toast('링크가 복사되었어요!'); }
+        catch (e) { toast('복사 실패 — 주소창의 링크를 복사해주세요'); }
+        document.body.removeChild(input);
+    }
+
+    // ===== 친구 목록 =====
+    function loadFriends(code) {
+        api('/v1/major-tests/results/' + encodeURIComponent(code))
+            .then(function (group) {
+                var list = $('friends-list');
+                var summary = $('friends-summary');
+                list.innerHTML = '';
+                if (!group.friends || group.friends.length === 0) {
+                    var empty = document.createElement('div');
+                    empty.className = 'friends-empty';
+                    empty.textContent = '아직 아무도 없어요. 링크를 공유해보세요! 🚀';
+                    list.appendChild(empty);
+                    summary.style.display = 'none';
+                    return;
+                }
+                var counts = {};
+                group.friends.forEach(function (f, i) {
+                    var t = TYPES[f.resultType];
+                    if (!t) return;
+                    counts[f.resultType] = (counts[f.resultType] || 0) + 1;
+                    var row = document.createElement('div');
+                    row.className = 'friend-row';
+                    var em = document.createElement('div');
+                    em.className = 'f-emoji';
+                    em.textContent = t.emoji;
+                    var info = document.createElement('div');
+                    var nm = document.createElement('div');
+                    nm.className = 'f-name';
+                    nm.textContent = f.nickname || ('친구 ' + (i + 1));
+                    var tp = document.createElement('div');
+                    tp.className = 'f-type';
+                    tp.textContent = t.name + ' · ' + t.track;
+                    info.appendChild(nm);
+                    info.appendChild(tp);
+                    row.appendChild(em);
+                    row.appendChild(info);
+                    if (saved && f.resultType === saved.resultType) {
+                        var badge = document.createElement('div');
+                        badge.className = 'f-badge';
+                        badge.textContent = '나랑 같은 유형!';
+                        row.appendChild(badge);
+                    }
+                    list.appendChild(row);
+                });
+                var top = Object.keys(counts).sort(function (a, b) { return counts[b] - counts[a]; })[0];
+                summary.textContent = '총 ' + group.friends.length + '명 참여 · 최다 유형은 ' +
+                    TYPES[top].emoji + ' ' + TYPES[top].name + ' (' + counts[top] + '명)';
+                summary.style.display = 'block';
+            })
+            .catch(function () { /* 조회 실패는 조용히 무시 */ });
+    }
+
+    // ===== 앱 CTA =====
+    function initAppLink() {
+        var ua = navigator.userAgent;
+        if (/android/i.test(ua)) $('btn-app').href = ANDROID_STORE;
+        else if (/iphone|ipad|ipod/i.test(ua)) $('btn-app').href = IOS_STORE;
+    }
+
+    // ===== 이벤트 바인딩 =====
+    $('btn-start').addEventListener('click', startQuiz);
+    $('btn-my-result').addEventListener('click', function () {
+        if (!saved) return;
+        myType = saved.resultType;
+        mySub = saved.subType;
+        renderResult(saved.resultType, saved.subType, true);
+        show('screen-result');
+    });
+    $('btn-back').addEventListener('click', function () {
+        if (currentQ > 0) { currentQ--; renderQuestion(); }
+    });
+    $('btn-save').addEventListener('click', saveResult);
+    $('nickname').addEventListener('keydown', function (e) {
+        if (e.key === 'Enter') saveResult();
+    });
+    $('btn-share').addEventListener('click', doShare);
+    $('btn-copy').addEventListener('click', copyLink);
+    $('btn-refresh').addEventListener('click', function () {
+        if (saved && saved.code) { loadFriends(saved.code); toast('새로고침했어요'); }
+    });
+    $('btn-retry').addEventListener('click', function () {
+        saved = null;
+        try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
+        startQuiz();
+    });
+
+    initIntro();
+    initAppLink();
+    </script>
+</body>
+</html>
