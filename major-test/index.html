@@ -501,6 +501,10 @@
     function initIntro() {
         var params = new URLSearchParams(location.search);
         var ref = params.get('ref');
+        // 내가 공유한 링크로 내가 다시 들어온 경우 — 초대 흐름을 타지 않는다
+        if (ref && saved && ref === saved.code) {
+            ref = null;
+        }
         if (ref && /^[A-Za-z0-9]{1,12}$/.test(ref)) {
             refCode = ref;
             api('/v1/major-tests/results/' + encodeURIComponent(ref))
@@ -708,6 +712,7 @@
             $('save-form').style.display = 'block';
             $('share-actions').style.display = 'none';
             $('friends-card').style.display = 'none';
+            if (saved && saved.nickname) $('nickname').value = saved.nickname; // 재응시 시 닉네임 유지
         }
     }
     function renderCompare(typeKey) {
@@ -763,10 +768,11 @@
                 resultType: myType,
                 subType: mySub,
                 nickname: nickname || null,
-                refCode: refCode
+                refCode: refCode,
+                code: (saved && saved.code) || null  // 재응시면 기존 결과를 갱신 (기기당 1개)
             })
         }).then(function (res) {
-            saved = { code: res.code, resultType: myType, subType: mySub, nickname: nickname || null };
+            saved = { code: res.code, resultType: myType, subType: mySub, nickname: nickname || (saved && saved.nickname) || null };
             persist(saved);
             $('save-form').style.display = 'none';
             $('share-actions').style.display = 'block';
@@ -898,8 +904,7 @@
         if (saved && saved.code) { loadFriends(saved.code); toast('새로고침했어요'); }
     });
     $('btn-retry').addEventListener('click', function () {
-        saved = null;
-        try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
+        // saved 는 유지 — 재응시 결과가 같은 코드로 갱신되어 기기당 결과 1개를 지킨다
         startQuiz();
     });
 
