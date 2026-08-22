@@ -111,6 +111,13 @@
             font-size: 15px; font-family: inherit; color: var(--ink); background: #fff;
         }
         .nick-row input::placeholder { color: #B4ACC9; }
+        .fun-form { display: flex; flex-direction: column; gap: 10px; margin-top: 4px; }
+        .fun-form input {
+            border: 1.5px solid var(--line); border-radius: 12px; padding: 13px 14px;
+            font-size: 15px; font-family: inherit; color: var(--ink); background: #fff; width: 100%;
+        }
+        .fun-form input::placeholder { color: #B4ACC9; }
+        .fun-form .btn + .btn { margin-top: 0; }
         .nick-row .btn { width: auto; padding: 12px 18px; font-size: 15px; }
         .hint { font-size: 12.5px; color: var(--ink-2); margin-top: 10px; }
         .share-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 14px; }
@@ -168,8 +175,27 @@
                     <p>12개 질문으로 알아보는 나의 학과 성향.<br>친구들과 결과를 비교해보세요!</p>
                     <div class="meta"><span>⏱ 3분 소요</span><span>🔒 로그인 불필요</span></div>
                     <button class="btn" id="btn-start">테스트 시작하기</button>
+                    <button class="btn ghost" id="btn-fun">이름으로 재미로 보기 ⚡ (10초)</button>
                     <button class="btn ghost" id="btn-my-result" style="display:none">내 결과 다시 보기</button>
                 </div>
+            </div>
+        </section>
+
+        <!-- 재미 모드 (이름·생년월일) -->
+        <section id="screen-fun" class="screen">
+            <div class="card">
+                <div class="hero">
+                    <div class="emoji">⚡</div>
+                    <h1>이름으로 재미로 보기</h1>
+                    <p>이름과 생년월일로 알아보는 나의 학과 성향.<br>진짜 재미로만 봐주세요!</p>
+                </div>
+                <div class="fun-form">
+                    <input id="fun-name" type="text" maxlength="12" placeholder="이름" autocomplete="off">
+                    <input id="fun-birth" type="date" min="1990-01-01" max="2020-12-31">
+                    <button class="btn" id="btn-fun-go">결과 보기</button>
+                    <button class="btn ghost" id="btn-fun-back">&larr; 돌아가기</button>
+                </div>
+                <div class="hint" style="text-align:center">입력한 이름·생년월일은 어디에도 저장·전송되지 않아요.</div>
             </div>
         </section>
 
@@ -389,6 +415,7 @@
     var currentQ = 0;
     var answers = [];          // 각 문항의 선택 index
     var myType = null, mySub = null;
+    var funMode = false;       // 이름·생년월일 재미 모드 여부
     var refCode = null;        // 초대 링크로 들어온 경우
     var inviter = null;        // 초대한 사람의 결과 (GET 응답의 me)
     var saved = loadSaved();
@@ -478,7 +505,32 @@
             finishQuiz();
         }
     }
+    // ===== 재미 모드 — 이름·생년월일은 해시 계산에만 쓰고 어디에도 보내지 않는다 =====
+    function funHash(str) {
+        var h = 5381;
+        for (var i = 0; i < str.length; i++) {
+            h = ((h << 5) + h + str.charCodeAt(i)) >>> 0;
+        }
+        return h;
+    }
+    function startFunResult() {
+        var name = $('fun-name').value.trim();
+        var birth = $('fun-birth').value;
+        if (!name) { toast('이름을 입력해주세요'); return; }
+        if (!birth) { toast('생년월일을 선택해주세요'); return; }
+        var h = funHash(name + '|' + birth);
+        var mainIdx = h % TYPE_KEYS.length;
+        var subIdx = Math.floor(h / 7) % TYPE_KEYS.length;
+        if (subIdx === mainIdx) subIdx = (subIdx + 1) % TYPE_KEYS.length;
+        funMode = true;
+        myType = TYPE_KEYS[mainIdx];
+        mySub = TYPE_KEYS[subIdx];
+        renderResult(myType, mySub, false);
+        show('screen-result');
+    }
+
     function finishQuiz() {
+        funMode = false;
         var scores = {};
         TYPE_KEYS.forEach(function (k) { scores[k] = 0; });
         answers.forEach(function (optIdx, qIdx) {
@@ -495,6 +547,7 @@
     // ===== 결과 =====
     function renderResult(typeKey, subKey, isSavedResult) {
         var t = TYPES[typeKey];
+        document.querySelector('.r-label').textContent = funMode ? '재미로 보는 학과 성향' : '나의 학과 성향';
         $('r-emoji').textContent = t.emoji;
         $('r-name').textContent = t.name;
         $('r-track').textContent = t.track;
@@ -699,8 +752,15 @@
 
     // ===== 이벤트 바인딩 =====
     $('btn-start').addEventListener('click', startQuiz);
+    $('btn-fun').addEventListener('click', function () { show('screen-fun'); });
+    $('btn-fun-go').addEventListener('click', startFunResult);
+    $('btn-fun-back').addEventListener('click', function () { show('screen-intro'); });
+    $('fun-birth').addEventListener('keydown', function (e) {
+        if (e.key === 'Enter') startFunResult();
+    });
     $('btn-my-result').addEventListener('click', function () {
         if (!saved) return;
+        funMode = false;
         myType = saved.resultType;
         mySub = saved.subType;
         renderResult(saved.resultType, saved.subType, true);
