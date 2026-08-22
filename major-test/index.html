@@ -43,7 +43,12 @@
         .screen { display: none; }
         .screen.active { display: block; animation: fade .3s ease; }
         @keyframes fade { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
-        @media (prefers-reduced-motion: reduce) { .screen.active { animation: none; } }
+        @keyframes pop { 0% { opacity: 0; transform: translateY(14px) scale(.98); } 100% { opacity: 1; transform: none; } }
+        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-7px); } }
+        @keyframes wiggle { 0%, 100% { transform: rotate(0); } 25% { transform: rotate(-8deg) scale(1.08); } 75% { transform: rotate(8deg) scale(1.08); } }
+        @media (prefers-reduced-motion: reduce) {
+            .screen.active, .card.pop, .r-emoji, .type-parade span, .btn { animation: none !important; }
+        }
 
         .card { background: var(--card); border: 1px solid var(--line); border-radius: 20px; padding: 28px 24px; box-shadow: 0 6px 24px rgba(80,40,160,.07); }
         .card + .card { margin-top: 16px; }
@@ -69,6 +74,9 @@
         .hero p { color: var(--ink-2); font-size: 15px; }
         .hero .meta { display: flex; justify-content: center; gap: 14px; margin: 18px 0 22px; font-size: 13px; color: var(--ink-2); }
         .hero .meta span { background: #fff; border: 1px solid var(--line); border-radius: 999px; padding: 5px 12px; }
+        .type-parade { display: flex; justify-content: center; gap: 6px; margin: 16px 0 4px; font-size: 26px; }
+        .type-parade span { display: inline-block; animation: bounce 1.6s ease-in-out infinite; cursor: default; }
+        .parade-caption { text-align: center; font-size: 12.5px; color: var(--ink-2); margin-bottom: 16px; }
         .invite-banner {
             display: none; align-items: center; gap: 10px; background: var(--brand-soft); border: 1px solid #DDD1FA;
             border-radius: 14px; padding: 12px 14px; margin-bottom: 16px; font-size: 14px; color: var(--brand-deep);
@@ -76,29 +84,46 @@
         .invite-banner .ib-emoji { font-size: 22px; }
 
         /* quiz */
-        .progress { height: 8px; background: #E5DEF8; border-radius: 999px; overflow: hidden; margin-bottom: 8px; }
-        .progress i { display: block; height: 100%; width: 0; background: linear-gradient(90deg, #8B5CF6, #D946EF); border-radius: 999px; transition: width .25s ease; }
-        .q-count { font-size: 13px; font-weight: 700; color: var(--brand); margin-bottom: 18px; }
-        .q-text { font-size: 20px; font-weight: 800; letter-spacing: -.4px; margin-bottom: 20px; text-wrap: balance; }
+        .progress-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; }
+        .q-count { font-size: 13px; font-weight: 800; color: var(--brand); }
+        .q-pct { font-size: 12px; font-weight: 700; color: var(--ink-2); font-variant-numeric: tabular-nums; }
+        .progress { height: 10px; background: #E5DEF8; border-radius: 999px; overflow: hidden; margin-bottom: 18px; }
+        .progress i { display: block; height: 100%; width: 0; background: linear-gradient(90deg, #8B5CF6, #D946EF); border-radius: 999px; transition: width .3s cubic-bezier(.4, 0, .2, 1); }
+        .card.pop { animation: pop .28s ease; }
+        .q-text { font-size: 21px; font-weight: 800; letter-spacing: -.4px; margin-bottom: 20px; text-wrap: balance; }
         .opt {
             display: block; width: 100%; text-align: left; cursor: pointer; font-family: inherit;
-            background: #fff; border: 1.5px solid var(--line); border-radius: 14px;
-            padding: 14px 16px; font-size: 15px; color: var(--ink); margin-bottom: 10px; transition: border-color .12s, background .12s;
+            background: #fff; border: 2px solid var(--line); border-radius: 16px;
+            padding: 15px 16px; font-size: 15.5px; font-weight: 600; color: var(--ink); margin-bottom: 10px;
+            transition: border-color .12s, background .12s, transform .1s;
         }
         .opt:hover { border-color: var(--brand); background: #FBFAFF; }
-        .opt:active { background: var(--brand-soft); }
+        .opt:active { transform: scale(.98); }
+        .opt.picked { border-color: var(--brand); background: var(--brand-soft); transform: scale(.98); }
         .q-back { background: none; border: 0; cursor: pointer; color: var(--ink-2); font-size: 14px; padding: 10px 0 0; font-family: inherit; }
         .q-back:hover { color: var(--ink); }
 
-        /* result */
-        .r-card { text-align: center; background: linear-gradient(160deg, #fff 60%, var(--brand-soft)); }
-        .r-label { display: inline-block; font-size: 12px; font-weight: 700; color: var(--brand); background: var(--brand-soft); border-radius: 999px; padding: 4px 12px; letter-spacing: .5px; }
-        .r-emoji { font-size: 72px; line-height: 1.3; margin-top: 10px; }
-        .r-name { font-size: 26px; font-weight: 800; letter-spacing: -.5px; }
-        .r-track { font-size: 14px; font-weight: 700; color: var(--brand-deep); margin: 2px 0 14px; }
-        .r-desc { font-size: 15px; color: var(--ink-2); text-align: left; background: #ffffffAA; border-radius: 12px; padding: 14px 16px; }
+        /* result — --tc 는 유형별 색으로 JS 가 채운다 */
+        .r-card {
+            --tc: #7C3AED;
+            text-align: center; position: relative; overflow: hidden;
+            background: linear-gradient(160deg, #fff 55%, color-mix(in srgb, var(--tc) 14%, #fff));
+            border-color: color-mix(in srgb, var(--tc) 30%, #fff);
+        }
+        .r-card::before {
+            content: ''; position: absolute; top: -70px; right: -70px; width: 180px; height: 180px;
+            border-radius: 50%; background: color-mix(in srgb, var(--tc) 12%, transparent); pointer-events: none;
+        }
+        .r-label { display: inline-block; font-size: 12px; font-weight: 700; color: #fff; background: var(--tc); border-radius: 999px; padding: 5px 13px; letter-spacing: .5px; }
+        .r-emoji { font-size: 80px; line-height: 1.3; margin-top: 10px; animation: wiggle .7s ease .25s; }
+        .r-name { font-size: 28px; font-weight: 800; letter-spacing: -.5px; }
+        .r-track { display: inline-block; font-size: 13.5px; font-weight: 800; color: var(--tc); background: color-mix(in srgb, var(--tc) 12%, #fff); border-radius: 999px; padding: 3px 12px; margin: 6px 0 14px; }
+        .r-desc { font-size: 15px; color: var(--ink-2); text-align: left; background: #ffffffCC; border-radius: 12px; padding: 14px 16px; position: relative; }
         .r-tags { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin-top: 14px; }
-        .r-tags span { font-size: 13px; font-weight: 600; color: var(--brand-deep); background: #fff; border: 1px solid var(--line); border-radius: 999px; padding: 5px 11px; }
+        .r-tags span { font-size: 13px; font-weight: 700; color: color-mix(in srgb, var(--tc) 75%, #000); background: #fff; border: 1px solid color-mix(in srgb, var(--tc) 30%, #fff); border-radius: 999px; padding: 5px 11px; }
+        .chem-row { display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 14px; padding-top: 14px; border-top: 1px dashed var(--line); font-size: 14px; color: var(--ink-2); flex-wrap: wrap; }
+        .chem-row b { color: var(--ink); }
+        #confetti-canvas { position: fixed; inset: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 20; }
         .sec-title { font-size: 15px; font-weight: 800; margin-bottom: 12px; display: flex; align-items: center; gap: 6px; }
         .majors { display: flex; flex-wrap: wrap; gap: 8px; }
         .majors span { font-size: 14px; font-weight: 600; background: var(--brand-soft); color: var(--brand-deep); border-radius: 10px; padding: 8px 12px; }
@@ -172,8 +197,12 @@
                 <div class="hero">
                     <div class="emoji">🎓</div>
                     <h1>나에게 맞는 학과는?</h1>
-                    <p>12개 질문으로 알아보는 나의 학과 성향.<br>친구들과 결과를 비교해보세요!</p>
-                    <div class="meta"><span>⏱ 3분 소요</span><span>🔒 로그인 불필요</span></div>
+                    <p>12개 질문으로 알아보는 나의 학과 성향.<br>친구들이랑 결과 비교하면 더 재밌어요!</p>
+                    <div class="type-parade" aria-hidden="true">
+                        <span style="animation-delay:0s">📚</span><span style="animation-delay:.15s">⚖️</span><span style="animation-delay:.3s">🔬</span><span style="animation-delay:.45s">🛠️</span><span style="animation-delay:.6s">🩺</span><span style="animation-delay:.75s">🎨</span><span style="animation-delay:.9s">🌱</span>
+                    </div>
+                    <div class="parade-caption">7가지 유형 중 나는 뭘까?</div>
+                    <div class="meta"><span>⏱ 3분 컷</span><span>🔒 로그인 없음</span></div>
                     <button class="btn" id="btn-start">테스트 시작하기</button>
                     <button class="btn ghost" id="btn-fun">이름으로 재미로 보기 ⚡ (10초)</button>
                     <button class="btn ghost" id="btn-my-result" style="display:none">내 결과 다시 보기</button>
@@ -201,9 +230,12 @@
 
         <!-- 퀴즈 -->
         <section id="screen-quiz" class="screen">
+            <div class="progress-row">
+                <div class="q-count" id="q-count"></div>
+                <div class="q-pct" id="q-pct"></div>
+            </div>
             <div class="progress"><i id="progress-bar"></i></div>
-            <div class="q-count" id="q-count"></div>
-            <div class="card">
+            <div class="card" id="quiz-card">
                 <div class="q-text" id="q-text"></div>
                 <div id="q-options"></div>
                 <button class="q-back" id="btn-back" style="display:none">&larr; 이전 질문</button>
@@ -220,6 +252,7 @@
                 <div class="r-desc" id="r-desc"></div>
                 <div class="r-tags" id="r-tags"></div>
                 <div class="sub-row" id="sub-row" style="display:none"></div>
+                <div class="chem-row" id="chem-row"></div>
             </div>
 
             <div class="card" id="compare-card" style="display:none">
@@ -284,6 +317,7 @@
     // ===== 유형 데이터 (H:인문 S:사회 N:자연 E:공학 M:의약 A:예체능 D:교육) =====
     var TYPES = {
         HUMANITIES: {
+            color: '#F97316',
             emoji: '📚', name: '이야기 수집가', track: '인문 계열',
             desc: '세상을 텍스트와 맥락으로 읽는 타입이에요. 남들이 지나치는 문장 하나, 역사 한 줄에서 의미를 발견하고, "왜?"라는 질문을 끝까지 파고드는 깊이가 무기예요.',
             tags: ['#문장수집', '#과몰입장인', '#깊이파기'],
@@ -291,6 +325,7 @@
             match: 'ARTS_SPORTS', matchNote: '감각 폭발형과 만나면 스토리에 색이 입혀지는 환상의 콤비!'
         },
         SOCIAL: {
+            color: '#3B82F6',
             emoji: '⚖️', name: '세상 설계자', track: '사회 계열',
             desc: '사람과 세상이 돌아가는 원리에 촉이 좋은 타입이에요. 흐름을 읽고 판을 짜는 데 재능이 있어서, 어디서든 "쟤 리더 하자"는 말을 듣는 편이에요.',
             tags: ['#판짜기고수', '#흐름읽기', '#설득력만렙'],
@@ -298,6 +333,7 @@
             match: 'ENGINEERING', matchNote: '집요한 메이커와 만나면 기획×구현, 창업해도 되는 조합!'
         },
         NATURAL: {
+            color: '#06B6D4',
             emoji: '🔬', name: '원리 탐정', track: '자연 계열',
             desc: '"그게 어떻게 되는 건데?"가 입에 붙은 타입이에요. 겉모습보다 그 밑의 원리와 구조가 궁금하고, 남들이 외울 때 혼자 증명하고 있는 사람이에요.',
             tags: ['#원리집착', '#팩트체크', '#관찰력만렙'],
@@ -305,6 +341,7 @@
             match: 'MEDICAL', matchNote: '사람 살리는 손과 만나면 연구실 최강 듀오!'
         },
         ENGINEERING: {
+            color: '#6366F1',
             emoji: '🛠️', name: '집요한 메이커', track: '공학 계열',
             desc: '머릿속 아이디어를 진짜로 만들어내는 타입이에요. "이거 더 편하게 안 되나?"가 인생 질문이고, 한번 꽂히면 밤새는 줄 모르는 몰입러예요.',
             tags: ['#만들다밤샘', '#효율덕후', '#문제해결사'],
@@ -312,6 +349,7 @@
             match: 'SOCIAL', matchNote: '세상 설계자와 만나면 기획×구현, 창업해도 되는 조합!'
         },
         MEDICAL: {
+            color: '#F43F5E',
             emoji: '🩺', name: '사람 살리는 손', track: '의약·보건 계열',
             desc: '위기의 순간 제일 침착해지는 타입이에요. 누군가를 돌보고 회복시키는 일에서 보람을 느끼고, 꼼꼼함과 따뜻함을 동시에 가진 흔치 않은 조합이에요.',
             tags: ['#침착의아이콘', '#꼼꼼함', '#힐러본능'],
@@ -319,6 +357,7 @@
             match: 'NATURAL', matchNote: '원리 탐정과 만나면 연구실 최강 듀오!'
         },
         ARTS_SPORTS: {
+            color: '#EC4899',
             emoji: '🎨', name: '감각 폭발형', track: '예체능 계열',
             desc: '느낌과 표현으로 세상과 소통하는 타입이에요. 남들이 못 보는 색과 리듬을 캐치하고, 정해진 답보다 나만의 답을 만드는 게 즐거운 사람이에요.',
             tags: ['#심미안', '#표현본능', '#무대체질'],
@@ -326,6 +365,7 @@
             match: 'HUMANITIES', matchNote: '이야기 수집가와 만나면 스토리에 색이 입혀지는 환상의 콤비!'
         },
         EDUCATION: {
+            color: '#22C55E',
             emoji: '🌱', name: '성장 조력자', track: '교육 계열',
             desc: '누가 뭘 이해 못 하면 그냥 못 지나치는 타입이에요. 설명 한 번으로 친구 성적을 올려본 적 있다면 바로 당신! 사람이 성장하는 순간을 제일 좋아해요.',
             tags: ['#설명장인', '#인내심만렙', '#선한영향력'],
@@ -479,10 +519,13 @@
         renderQuestion();
         show('screen-quiz');
     }
+    var picking = false; // 선택 피드백 중 중복 클릭 방지
     function renderQuestion() {
         var item = QUESTIONS[currentQ];
-        $('progress-bar').style.width = Math.round((currentQ / QUESTIONS.length) * 100) + '%';
+        var pct = Math.round((currentQ / QUESTIONS.length) * 100);
+        $('progress-bar').style.width = pct + '%';
         $('q-count').textContent = 'Q' + (currentQ + 1) + ' / ' + QUESTIONS.length;
+        $('q-pct').textContent = pct + '%';
         $('q-text').textContent = item.q;
         var box = $('q-options');
         box.innerHTML = '';
@@ -491,20 +534,75 @@
             btn.className = 'opt';
             btn.type = 'button';
             btn.textContent = opt.t;
-            btn.addEventListener('click', function () { pick(idx); });
+            btn.addEventListener('click', function () { pick(idx, btn); });
             box.appendChild(btn);
         });
         $('btn-back').style.display = currentQ > 0 ? 'inline' : 'none';
+        var card = $('quiz-card');
+        card.classList.remove('pop');
+        void card.offsetWidth; // reflow 로 애니메이션 재시작
+        card.classList.add('pop');
     }
-    function pick(idx) {
+    function pick(idx, btn) {
+        if (picking) return;
+        picking = true;
         answers[currentQ] = idx;
-        if (currentQ < QUESTIONS.length - 1) {
-            currentQ++;
-            renderQuestion();
-        } else {
-            finishQuiz();
-        }
+        if (btn) btn.classList.add('picked');
+        if (navigator.vibrate) navigator.vibrate(10);
+        setTimeout(function () {
+            picking = false;
+            if (currentQ < QUESTIONS.length - 1) {
+                currentQ++;
+                renderQuestion();
+            } else {
+                finishQuiz();
+            }
+        }, 180);
     }
+    // ===== 컨페티 — 결과 공개 순간 1.6초 =====
+    function confetti(baseColor) {
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+        var canvas = document.createElement('canvas');
+        canvas.id = 'confetti-canvas';
+        document.body.appendChild(canvas);
+        var ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        var colors = [baseColor, '#FBBF24', '#F472B6', '#60A5FA', '#34D399'];
+        var parts = [];
+        for (var i = 0; i < 90; i++) {
+            parts.push({
+                x: Math.random() * canvas.width,
+                y: -20 - Math.random() * canvas.height * 0.5,
+                w: 6 + Math.random() * 6,
+                h: 8 + Math.random() * 8,
+                vy: 2.5 + Math.random() * 3.5,
+                vx: -1.5 + Math.random() * 3,
+                rot: Math.random() * Math.PI,
+                vr: -0.12 + Math.random() * 0.24,
+                color: colors[i % colors.length]
+            });
+        }
+        var start = performance.now();
+        function frame(now) {
+            var elapsed = now - start;
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.globalAlpha = Math.max(0, 1 - elapsed / 1600);
+            parts.forEach(function (p) {
+                p.x += p.vx; p.y += p.vy; p.rot += p.vr;
+                ctx.save();
+                ctx.translate(p.x, p.y);
+                ctx.rotate(p.rot);
+                ctx.fillStyle = p.color;
+                ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+                ctx.restore();
+            });
+            if (elapsed < 1600) requestAnimationFrame(frame);
+            else canvas.remove();
+        }
+        requestAnimationFrame(frame);
+    }
+
     // ===== 재미 모드 — 이름·생년월일은 해시 계산에만 쓰고 어디에도 보내지 않는다 =====
     function funHash(str) {
         var h = 5381;
@@ -527,6 +625,7 @@
         mySub = TYPE_KEYS[subIdx];
         renderResult(myType, mySub, false);
         show('screen-result');
+        confetti(TYPES[myType].color);
     }
 
     function finishQuiz() {
@@ -542,11 +641,13 @@
         mySub = scores[sorted[1]] > 0 ? sorted[1] : null;
         renderResult(myType, mySub, false);
         show('screen-result');
+        confetti(TYPES[myType].color);
     }
 
     // ===== 결과 =====
     function renderResult(typeKey, subKey, isSavedResult) {
         var t = TYPES[typeKey];
+        document.querySelector('.r-card').style.setProperty('--tc', t.color);
         document.querySelector('.r-label').textContent = funMode ? '재미로 보는 학과 성향' : '나의 학과 성향';
         $('r-emoji').textContent = t.emoji;
         $('r-name').textContent = t.name;
@@ -572,6 +673,17 @@
             subRow.style.display = 'flex';
         } else {
             subRow.style.display = 'none';
+        }
+        var chem = $('chem-row');
+        chem.innerHTML = '';
+        var mt = TYPES[t.match];
+        if (mt) {
+            var chemLabel = document.createElement('span');
+            chemLabel.textContent = '💘 환상의 케미 ';
+            var chemType = document.createElement('b');
+            chemType.textContent = mt.emoji + ' ' + mt.name;
+            chem.appendChild(chemLabel);
+            chem.appendChild(chemType);
         }
         var majors = $('r-majors');
         majors.innerHTML = '';
