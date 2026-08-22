@@ -311,77 +311,77 @@
 
     // ===== 문항 (w: 유형별 가중치) =====
     var QUESTIONS = [
-        { q: '갑자기 자유 시간이 생겼다! 뭐부터 할까?', o: [
-            { t: '밀린 웹툰·소설·영화 정주행 📖', w: { HUMANITIES: 2, ARTS_SPORTS: 1 } },
-            { t: '친구들 불러서 수다·근황 토크 ☕', w: { SOCIAL: 2, EDUCATION: 1 } },
-            { t: '궁금했던 주제 유튜브·다큐로 파기 🔍', w: { NATURAL: 2, HUMANITIES: 1 } },
-            { t: '방 꾸미기, 뭔가 만들거나 조립하기 🔧', w: { ENGINEERING: 2, ARTS_SPORTS: 1 } }
+        { q: '자유 시간이 생기면?', o: [
+            { t: '웹툰·영화 정주행 📖', w: { HUMANITIES: 2, ARTS_SPORTS: 1 } },
+            { t: '친구 만나서 수다 ☕', w: { SOCIAL: 2, EDUCATION: 1 } },
+            { t: '궁금한 주제 파기 🔍', w: { NATURAL: 2, HUMANITIES: 1 } },
+            { t: '뭔가 만들기·조립 🔧', w: { ENGINEERING: 2, ARTS_SPORTS: 1 } }
         ]},
-        { q: '팀플에서 나의 포지션은?', o: [
-            { t: '아이디어 내고 스토리 짜는 기획 담당 💡', w: { HUMANITIES: 2, ARTS_SPORTS: 1 } },
-            { t: '일정 정리하고 역할 나누는 리더 📋', w: { SOCIAL: 2, EDUCATION: 1 } },
-            { t: '자료 조사하고 팩트 검증하는 담당 🧐', w: { NATURAL: 2, SOCIAL: 1 } },
-            { t: 'PPT·영상 뚝딱 만드는 제작 담당 🖥️', w: { ENGINEERING: 2, ARTS_SPORTS: 1 } }
+        { q: '팀플에서 나는?', o: [
+            { t: '아이디어·기획 담당 💡', w: { HUMANITIES: 2, ARTS_SPORTS: 1 } },
+            { t: '일정 챙기는 리더 📋', w: { SOCIAL: 2, EDUCATION: 1 } },
+            { t: '자료 조사 담당 🧐', w: { NATURAL: 2, SOCIAL: 1 } },
+            { t: 'PPT·영상 제작 담당 🖥️', w: { ENGINEERING: 2, ARTS_SPORTS: 1 } }
         ]},
-        { q: '시험 공부할 때 나는 어떤 스타일?', o: [
-            { t: '개념을 이야기처럼 이해해야 외워짐', w: { HUMANITIES: 2, EDUCATION: 1 } },
-            { t: '친구들이랑 스터디하며 서로 설명해줌', w: { EDUCATION: 2, SOCIAL: 1 } },
-            { t: '원리를 이해 못 하면 못 넘어감', w: { NATURAL: 2, ENGINEERING: 1 } },
-            { t: '기출 유형 분석해서 효율적으로 공략', w: { ENGINEERING: 2, NATURAL: 1 } }
+        { q: '시험 공부 스타일은?', o: [
+            { t: '이야기처럼 이해해야 외워짐', w: { HUMANITIES: 2, EDUCATION: 1 } },
+            { t: '친구랑 서로 설명해주기', w: { EDUCATION: 2, SOCIAL: 1 } },
+            { t: '원리 모르면 못 넘어감', w: { NATURAL: 2, ENGINEERING: 1 } },
+            { t: '기출 분석으로 효율 공략', w: { ENGINEERING: 2, NATURAL: 1 } }
         ]},
-        { q: '내 유튜브 알고리즘에 제일 자주 뜨는 건?', o: [
-            { t: '역사·인문학·책 리뷰 📜', w: { HUMANITIES: 2 } },
-            { t: '시사·경제·자기계발 브이로그 💼', w: { SOCIAL: 2 } },
-            { t: '과학 실험·우주·의학 다큐 🧪', w: { NATURAL: 2, MEDICAL: 1 } },
+        { q: '내 유튜브 알고리즘은?', o: [
+            { t: '역사·인문학·책 📜', w: { HUMANITIES: 2 } },
+            { t: '시사·경제·브이로그 💼', w: { SOCIAL: 2 } },
+            { t: '과학·우주·의학 🧪', w: { NATURAL: 2, MEDICAL: 1 } },
             { t: '그림·음악·운동·댄스 🎧', w: { ARTS_SPORTS: 2 } }
         ]},
-        { q: '친구가 고민 상담을 해오면 나는?', o: [
-            { t: '끝까지 들어주고 마음에 공감해줌 🫂', w: { MEDICAL: 2, EDUCATION: 1 } },
-            { t: '상황을 정리해주고 현실적인 해결책 제시', w: { SOCIAL: 2, ENGINEERING: 1 } },
-            { t: '비슷한 사례나 와닿는 글귀를 찾아 건네줌', w: { HUMANITIES: 2 } },
-            { t: '"맛있는 거 먹으러 가자" 기분 전환 담당 🍜', w: { ARTS_SPORTS: 2, SOCIAL: 1 } }
+        { q: '친구가 고민 상담을 하면?', o: [
+            { t: '끝까지 듣고 공감 🫂', w: { MEDICAL: 2, EDUCATION: 1 } },
+            { t: '현실적인 해결책 제시', w: { SOCIAL: 2, ENGINEERING: 1 } },
+            { t: '와닿는 글귀 찾아주기', w: { HUMANITIES: 2 } },
+            { t: '"맛있는 거 먹으러 가자" 🍜', w: { ARTS_SPORTS: 2, SOCIAL: 1 } }
         ]},
-        { q: '길에서 누가 쓰러졌다! 나의 첫 반응은?', o: [
-            { t: '바로 달려가 상태 확인하고 119 신고 🚑', w: { MEDICAL: 2 } },
-            { t: '주변에 도움을 요청하고 상황을 정리함', w: { SOCIAL: 2, EDUCATION: 1 } },
-            { t: '배웠던 응급처치 방법을 빠르게 떠올림', w: { MEDICAL: 2, NATURAL: 1 } },
-            { t: '구급차가 들어올 길부터 확보함', w: { ENGINEERING: 2, SOCIAL: 1 } }
+        { q: '길에서 누가 쓰러졌다!', o: [
+            { t: '달려가서 119 신고 🚑', w: { MEDICAL: 2 } },
+            { t: '주변에 도움 요청', w: { SOCIAL: 2, EDUCATION: 1 } },
+            { t: '응급처치법부터 떠올림', w: { MEDICAL: 2, NATURAL: 1 } },
+            { t: '구급차 올 길부터 확보', w: { ENGINEERING: 2, SOCIAL: 1 } }
         ]},
-        { q: '새 학기, 동아리를 하나 고른다면?', o: [
-            { t: '밴드·댄스·미술 같은 예술 동아리 🎸', w: { ARTS_SPORTS: 2 } },
-            { t: '봉사·또래 멘토링 동아리 🤝', w: { EDUCATION: 2, MEDICAL: 1 } },
-            { t: '코딩·로봇·발명 동아리 🤖', w: { ENGINEERING: 2, NATURAL: 1 } },
-            { t: '토론·신문·모의UN 동아리 🎤', w: { SOCIAL: 2, HUMANITIES: 1 } }
+        { q: '동아리 하나 고른다면?', o: [
+            { t: '밴드·댄스·미술 🎸', w: { ARTS_SPORTS: 2 } },
+            { t: '봉사·멘토링 🤝', w: { EDUCATION: 2, MEDICAL: 1 } },
+            { t: '코딩·로봇·발명 🤖', w: { ENGINEERING: 2, NATURAL: 1 } },
+            { t: '토론·신문·모의UN 🎤', w: { SOCIAL: 2, HUMANITIES: 1 } }
         ]},
-        { q: '수업 중 제일 설레는 순간은?', o: [
-            { t: '소설·시를 읽고 해석을 나눌 때', w: { HUMANITIES: 2, EDUCATION: 1 } },
-            { t: '실험하고 결과를 관찰할 때', w: { NATURAL: 2, MEDICAL: 1 } },
-            { t: '자유 주제로 발표·토론할 때', w: { SOCIAL: 2 } },
-            { t: '체육·미술·음악 시간이 시작될 때', w: { ARTS_SPORTS: 2 } }
+        { q: '제일 설레는 수업은?', o: [
+            { t: '소설·시 해석 나누기', w: { HUMANITIES: 2, EDUCATION: 1 } },
+            { t: '실험하고 관찰하기', w: { NATURAL: 2, MEDICAL: 1 } },
+            { t: '자유 주제 발표·토론', w: { SOCIAL: 2 } },
+            { t: '체육·미술·음악', w: { ARTS_SPORTS: 2 } }
         ]},
-        { q: '미래의 나, 어떤 모습이면 제일 뿌듯할까?', o: [
-            { t: '내 이름이 새겨진 책이나 작품 ✍️', w: { HUMANITIES: 2, ARTS_SPORTS: 1 } },
-            { t: '아픈 사람을 낫게 하는 전문가 ⚕️', w: { MEDICAL: 2 } },
-            { t: '세상을 편하게 만드는 기술의 개발자 🚀', w: { ENGINEERING: 2, NATURAL: 1 } },
-            { t: '누군가의 인생을 바꾼 선생님 🍎', w: { EDUCATION: 2 } }
+        { q: '미래의 나, 뭐가 제일 뿌듯할까?', o: [
+            { t: '내 이름 새겨진 작품 ✍️', w: { HUMANITIES: 2, ARTS_SPORTS: 1 } },
+            { t: '사람을 낫게 하는 전문가 ⚕️', w: { MEDICAL: 2 } },
+            { t: '세상을 바꾸는 기술 개발 🚀', w: { ENGINEERING: 2, NATURAL: 1 } },
+            { t: '인생을 바꿔준 선생님 🍎', w: { EDUCATION: 2 } }
         ]},
-        { q: '문제가 도저히 안 풀릴 때 나는?', o: [
-            { t: '될 때까지 붙잡고 끝까지 파고든다', w: { NATURAL: 2, ENGINEERING: 1 } },
-            { t: '잘 아는 사람을 찾아가 물어본다', w: { SOCIAL: 2, EDUCATION: 1 } },
-            { t: '일단 쉬면서 감이 올 때까지 기다린다', w: { ARTS_SPORTS: 2, HUMANITIES: 1 } },
-            { t: '다른 방법이나 도구를 찾아 우회한다', w: { ENGINEERING: 2, SOCIAL: 1 } }
+        { q: '문제가 안 풀리면?', o: [
+            { t: '될 때까지 파고든다', w: { NATURAL: 2, ENGINEERING: 1 } },
+            { t: '아는 사람한테 물어본다', w: { SOCIAL: 2, EDUCATION: 1 } },
+            { t: '쉬면서 감 올 때까지 기다림', w: { ARTS_SPORTS: 2, HUMANITIES: 1 } },
+            { t: '다른 방법으로 우회', w: { ENGINEERING: 2, SOCIAL: 1 } }
         ]},
-        { q: '들으면 제일 기분 좋은 칭찬은?', o: [
-            { t: '"글 진짜 잘 쓴다, 말도 예쁘게 해"', w: { HUMANITIES: 2 } },
-            { t: '"똑똑하다, 어떻게 그런 생각을 해?"', w: { NATURAL: 2 } },
-            { t: '"너 덕분에 살았다, 진짜 고마워"', w: { MEDICAL: 2, EDUCATION: 1 } },
-            { t: '"센스 미쳤다! 이거 네가 만든 거야?"', w: { ARTS_SPORTS: 2, ENGINEERING: 1 } }
+        { q: '제일 기분 좋은 칭찬은?', o: [
+            { t: '"글 진짜 잘 쓴다"', w: { HUMANITIES: 2 } },
+            { t: '"어떻게 그런 생각을 해?"', w: { NATURAL: 2 } },
+            { t: '"너 덕분에 살았다"', w: { MEDICAL: 2, EDUCATION: 1 } },
+            { t: '"센스 미쳤다!"', w: { ARTS_SPORTS: 2, ENGINEERING: 1 } }
         ]},
-        { q: '10년 후 내 책상 위에 있을 것 같은 물건은?', o: [
-            { t: '손때 묻은 책과 만년필 🖋️', w: { HUMANITIES: 2 } },
-            { t: '명함첩과 일정 가득한 플래너 🗓️', w: { SOCIAL: 2 } },
-            { t: '최신 장비와 듀얼 모니터 🖥️', w: { ENGINEERING: 2, NATURAL: 1 } },
-            { t: '아이들 사진과 감사 편지 💌', w: { EDUCATION: 2, MEDICAL: 1 } }
+        { q: '10년 후 내 책상 위엔?', o: [
+            { t: '책과 만년필 🖋️', w: { HUMANITIES: 2 } },
+            { t: '일정 가득한 플래너 🗓️', w: { SOCIAL: 2 } },
+            { t: '최신 장비·듀얼 모니터 🖥️', w: { ENGINEERING: 2, NATURAL: 1 } },
+            { t: '아이들의 감사 편지 💌', w: { EDUCATION: 2, MEDICAL: 1 } }
         ]}
     ];
 
