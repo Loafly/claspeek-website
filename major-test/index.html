@@ -170,6 +170,20 @@
         .friend-row .f-type { font-size: 13px; color: var(--ink-2); }
         .friend-row .f-badge { margin-left: auto; font-size: 12px; font-weight: 700; color: var(--brand-deep); background: var(--brand-soft); border-radius: 999px; padding: 4px 10px; white-space: nowrap; }
         .friends-summary { font-size: 14px; color: var(--ink-2); margin-bottom: 8px; }
+        .team-sec { margin-top: 4px; }
+        .team-sec + .team-sec { margin-top: 18px; }
+        .team-sec-title { font-size: 13px; font-weight: 800; color: var(--ink-2); letter-spacing: .3px; margin-bottom: 8px; }
+        .dist-row { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; font-size: 13px; }
+        .dist-row .de { width: 22px; text-align: center; flex: none; }
+        .dist-row .db { height: 14px; border-radius: 999px; min-width: 14px; transition: width .4s ease; }
+        .dist-row .dc { color: var(--ink-2); font-weight: 700; flex: none; }
+        .role-row { display: flex; align-items: baseline; gap: 8px; padding: 6px 0; font-size: 14px; border-bottom: 1px solid #F1EDFB; }
+        .role-row:last-child { border-bottom: 0; }
+        .role-row .rl { font-weight: 800; flex: none; }
+        .role-row .rn { color: var(--ink-2); }
+        .chem-pair { display: flex; align-items: center; gap: 8px; font-size: 14px; padding: 6px 0; }
+        .chem-pair b { color: var(--ink); }
+        .chem-pair .cl { margin-left: auto; font-size: 12px; font-weight: 700; color: var(--brand-deep); background: var(--brand-soft); border-radius: 999px; padding: 3px 10px; white-space: nowrap; }
         .refresh { background: none; border: 0; cursor: pointer; color: var(--brand); font-size: 13px; font-weight: 700; margin-left: auto; font-family: inherit; }
 
         .compare { display: flex; align-items: center; justify-content: center; gap: 14px; }
@@ -300,6 +314,14 @@
                 <div class="sec-title">👥 함께한 친구들 <button class="refresh" id="btn-refresh">새로고침</button></div>
                 <div class="friends-summary" id="friends-summary" style="display:none"></div>
                 <div id="friends-list"><div class="friends-empty">아직 아무도 없어요. 링크를 공유해보세요! 🚀</div></div>
+            </div>
+
+            <div class="card" id="team-card" style="display:none">
+                <div class="sec-title">🏆 우리팀 리포트</div>
+                <div class="team-sec"><div class="team-sec-title">유형 분포</div><div id="team-dist"></div></div>
+                <div class="team-sec"><div class="team-sec-title">팀 역할</div><div id="team-roles"></div></div>
+                <div class="team-sec" id="team-chem-sec" style="display:none"><div class="team-sec-title">케미 조합</div><div id="team-chem"></div></div>
+                <button class="btn ghost" id="btn-team-image" style="margin-top:16px">우리팀 카드 저장 📸</button>
             </div>
 
             <div class="card cta-card">
@@ -732,6 +754,7 @@
             $('save-form').style.display = 'block';
             $('share-actions').style.display = 'none';
             $('friends-card').style.display = 'none';
+            $('team-card').style.display = 'none';
             if (saved && saved.nickname) $('nickname').value = saved.nickname; // 재응시 시 닉네임 유지
         }
     }
@@ -839,6 +862,8 @@
     function loadFriends(code) {
         api('/v1/major-tests/results/' + encodeURIComponent(code))
             .then(function (group) {
+                lastGroup = group;
+                renderTeamReport(group);
                 var list = $('friends-list');
                 var summary = $('friends-summary');
                 list.innerHTML = '';
@@ -994,6 +1019,191 @@
         }, 'image/png');
     }
 
+    // ===== 우리팀 리포트 =====
+    var TEAM_ROLES = {
+        HUMANITIES: '팀의 스토리텔러', SOCIAL: '팀의 사령탑', NATURAL: '팀의 브레인',
+        ENGINEERING: '팀의 해결사', MEDICAL: '팀의 구급대', ARTS_SPORTS: '팀의 분위기메이커',
+        EDUCATION: '팀의 멘탈지기'
+    };
+    var lastGroup = null;
+
+    function teamMembers(group) {
+        var members = [];
+        if (group.me && TYPES[group.me.resultType]) {
+            members.push({ name: '나', type: group.me.resultType });
+        }
+        (group.friends || []).forEach(function (f, i) {
+            if (TYPES[f.resultType]) {
+                members.push({ name: f.nickname || ('친구' + (i + 1)), type: f.resultType });
+            }
+        });
+        return members;
+    }
+
+    function renderTeamReport(group) {
+        var card = $('team-card');
+        if (!group || !group.friends || group.friends.length === 0) { card.style.display = 'none'; return; }
+        var members = teamMembers(group);
+
+        // 유형 분포
+        var counts = {};
+        members.forEach(function (m) { counts[m.type] = (counts[m.type] || 0) + 1; });
+        var sorted = Object.keys(counts).sort(function (a, b) { return counts[b] - counts[a]; });
+        var max = counts[sorted[0]];
+        var dist = $('team-dist');
+        dist.innerHTML = '';
+        sorted.forEach(function (k) {
+            var row = document.createElement('div');
+            row.className = 'dist-row';
+            var de = document.createElement('span');
+            de.className = 'de'; de.textContent = TYPES[k].emoji;
+            var db = document.createElement('span');
+            db.className = 'db';
+            db.style.background = TYPES[k].color;
+            db.style.width = Math.round(counts[k] * 100 / max * 0.7) + '%';
+            var dc = document.createElement('span');
+            dc.className = 'dc'; dc.textContent = counts[k] + '명';
+            row.appendChild(de); row.appendChild(db); row.appendChild(dc);
+            dist.appendChild(row);
+        });
+
+        // 팀 역할 — 유형별 멤버 묶음
+        var roles = $('team-roles');
+        roles.innerHTML = '';
+        sorted.forEach(function (k) {
+            var names = members.filter(function (m) { return m.type === k; }).map(function (m) { return m.name; });
+            var row = document.createElement('div');
+            row.className = 'role-row';
+            var rl = document.createElement('span');
+            rl.className = 'rl'; rl.textContent = TYPES[k].emoji + ' ' + TEAM_ROLES[k];
+            var rn = document.createElement('span');
+            rn.className = 'rn'; rn.textContent = names.join(', ');
+            row.appendChild(rl); row.appendChild(rn);
+            roles.appendChild(row);
+        });
+
+        // 케미 조합 — 환상의 케미(서로 match) 우선, 같은 유형은 다음
+        var pairs = [];
+        for (var i = 0; i < members.length; i++) {
+            for (var j = i + 1; j < members.length; j++) {
+                var a = members[i], b = members[j];
+                if (TYPES[a.type].match === b.type || TYPES[b.type].match === a.type) {
+                    pairs.push({ a: a, b: b, label: '💘 환상의 케미', w: 2 });
+                } else if (a.type === b.type) {
+                    pairs.push({ a: a, b: b, label: '🎉 완전 통함', w: 1 });
+                }
+            }
+        }
+        pairs.sort(function (x, y) { return y.w - x.w; });
+        var chemSec = $('team-chem-sec');
+        var chem = $('team-chem');
+        chem.innerHTML = '';
+        if (pairs.length === 0) {
+            chemSec.style.display = 'none';
+        } else {
+            pairs.slice(0, 4).forEach(function (p) {
+                var row = document.createElement('div');
+                row.className = 'chem-pair';
+                var names = document.createElement('b');
+                names.textContent = p.a.name + ' × ' + p.b.name;
+                var em = document.createElement('span');
+                em.textContent = TYPES[p.a.type].emoji + TYPES[p.b.type].emoji;
+                var cl = document.createElement('span');
+                cl.className = 'cl'; cl.textContent = p.label;
+                row.appendChild(names); row.appendChild(em); row.appendChild(cl);
+                chem.appendChild(row);
+            });
+            if (pairs.length > 4) {
+                var more = document.createElement('div');
+                more.className = 'friends-summary';
+                more.textContent = '외 ' + (pairs.length - 4) + '개 조합 더!';
+                chem.appendChild(more);
+            }
+            chemSec.style.display = 'block';
+        }
+        card.style.display = 'block';
+    }
+
+    function drawTeamCard() {
+        var group = lastGroup;
+        var members = teamMembers(group);
+        var W = 1080, H = 1920;
+        var canvas = document.createElement('canvas');
+        canvas.width = W; canvas.height = H;
+        var ctx = canvas.getContext('2d');
+        var grad = ctx.createLinearGradient(0, 0, W, H);
+        grad.addColorStop(0, '#8B5CF6');
+        grad.addColorStop(1, '#4C1D95');
+        ctx.fillStyle = grad;
+        ctx.fillRect(0, 0, W, H);
+        ctx.fillStyle = 'rgba(255,255,255,.12)';
+        ctx.beginPath(); ctx.arc(W - 40, 160, 240, 0, 7); ctx.fill();
+        ctx.beginPath(); ctx.arc(60, H - 200, 280, 0, 7); ctx.fill();
+
+        ctx.textAlign = 'center';
+        ctx.fillStyle = '#fff';
+        ctx.font = '800 76px -apple-system, "Apple SD Gothic Neo", sans-serif';
+        ctx.fillText('우리들의 학과 성향 🎓', W / 2, 260);
+        ctx.font = '700 40px -apple-system, "Apple SD Gothic Neo", sans-serif';
+        ctx.globalAlpha = .9;
+        ctx.fillText('총 ' + members.length + '명 참여', W / 2, 340);
+        ctx.globalAlpha = 1;
+
+        var shown = members.slice(0, 9);
+        var rowH = 118, startY = 470;
+        shown.forEach(function (m, i) {
+            var y = startY + i * rowH;
+            ctx.fillStyle = 'rgba(255,255,255,.16)';
+            ctx.beginPath();
+            ctx.roundRect(90, y - 66, W - 180, 96, 28);
+            ctx.fill();
+            ctx.fillStyle = '#fff';
+            ctx.textAlign = 'left';
+            ctx.font = '64px -apple-system, sans-serif';
+            ctx.fillText(TYPES[m.type].emoji, 130, y + 8);
+            ctx.font = '800 46px -apple-system, "Apple SD Gothic Neo", sans-serif';
+            ctx.fillText(m.name, 240, y);
+            ctx.textAlign = 'right';
+            ctx.font = '600 38px -apple-system, "Apple SD Gothic Neo", sans-serif';
+            ctx.globalAlpha = .9;
+            ctx.fillText(TYPES[m.type].name, W - 130, y);
+            ctx.globalAlpha = 1;
+        });
+        ctx.textAlign = 'center';
+        if (members.length > 9) {
+            ctx.font = '600 38px -apple-system, "Apple SD Gothic Neo", sans-serif';
+            ctx.globalAlpha = .85;
+            ctx.fillText('외 ' + (members.length - 9) + '명이 더 있어요!', W / 2, startY + 9 * rowH);
+            ctx.globalAlpha = 1;
+        }
+
+        ctx.font = '700 44px -apple-system, "Apple SD Gothic Neo", sans-serif';
+        ctx.fillText('너도 해봐 👉 claspeek.com/major-test', W / 2, 1700);
+        ctx.font = '800 40px -apple-system, sans-serif';
+        ctx.globalAlpha = .9;
+        ctx.fillText('Claspeek', W / 2, 1800);
+        ctx.globalAlpha = 1;
+        return canvas;
+    }
+    function saveTeamImage() {
+        if (!lastGroup) return;
+        drawTeamCard().toBlob(function (blob) {
+            if (!blob) { toast('이미지 생성에 실패했어요'); return; }
+            var file = new File([blob], 'claspeek-team.png', { type: 'image/png' });
+            if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                navigator.share({ files: [file] }).catch(function () {});
+            } else {
+                var a = document.createElement('a');
+                a.href = URL.createObjectURL(blob);
+                a.download = 'claspeek-team.png';
+                document.body.appendChild(a);
+                a.click();
+                a.remove();
+                toast('이미지를 저장했어요!');
+            }
+        }, 'image/png');
+    }
+
     // ===== 앱 CTA =====
     function initAppLink() {
         var ua = navigator.userAgent;
@@ -1027,6 +1237,7 @@
     });
     $('btn-share').addEventListener('click', doShare);
     $('btn-save-image').addEventListener('click', saveResultImage);
+    $('btn-team-image').addEventListener('click', saveTeamImage);
     $('btn-copy').addEventListener('click', copyLink);
     $('btn-refresh').addEventListener('click', function () {
         if (saved && saved.code) { loadFriends(saved.code); toast('새로고침했어요'); }
