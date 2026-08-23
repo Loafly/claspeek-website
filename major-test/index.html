@@ -16,192 +16,200 @@
     <meta property="og:image:height" content="420">
     <meta property="og:url" content="https://www.claspeek.com/major-test/">
     <meta property="og:type" content="website">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Gaegu:wght@700&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         :root {
             --brand: #7C3AED;
-            --brand-soft: #EDE9FE;
-            --brand-deep: #5B21B6;
-            --ink: #1F1633;
-            --ink-2: #6B6480;
-            --bg: #F6F3FF;
+            --brand-soft: #EFE9FF;
+            --ink: #171513;
+            --ink-2: #6E6759;
+            --paper: #FFF9EE;
             --card: #FFFFFF;
-            --line: #E8E2F7;
+            --line: #171513;
         }
         html { -webkit-text-size-adjust: 100%; }
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Apple SD Gothic Neo', Roboto, sans-serif;
             color: var(--ink);
-            background: var(--bg);
-            background-image: radial-gradient(circle at 15% 10%, rgba(124,58,237,.10), transparent 45%),
-                              radial-gradient(circle at 85% 90%, rgba(236,72,153,.08), transparent 45%);
+            background: var(--paper);
+            background-image: linear-gradient(#00000008 1px, transparent 1px), linear-gradient(90deg, #00000008 1px, transparent 1px);
+            background-size: 28px 28px;
             min-height: 100vh;
             line-height: 1.6;
         }
+        .display { font-family: 'Black Han Sans', -apple-system, sans-serif; font-weight: 400; }
+        .hand { font-family: 'Gaegu', cursive; }
         .wrap { max-width: 480px; margin: 0 auto; padding: 20px 20px 56px; }
         .top { display: flex; align-items: center; justify-content: space-between; padding: 4px 0 20px; }
-        .top a { display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 15px; color: var(--ink); text-decoration: none; }
-        .top img { border-radius: 7px; }
+        .top a { display: flex; align-items: center; gap: 8px; font-weight: 800; font-size: 15px; color: var(--ink); text-decoration: none; }
+        .top img { border-radius: 7px; border: 2px solid var(--line); }
         .screen { display: none; }
         .screen.active { display: block; animation: fade .3s ease; }
         @keyframes fade { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
-        @keyframes pop { 0% { opacity: 0; transform: translateY(14px) scale(.98); } 100% { opacity: 1; transform: none; } }
+        @keyframes pop { 0% { opacity: 0; transform: translateY(14px); } 100% { opacity: 1; transform: none; } }
         @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-7px); } }
-        @keyframes wiggle { 0%, 100% { transform: rotate(0); } 25% { transform: rotate(-8deg) scale(1.08); } 75% { transform: rotate(8deg) scale(1.08); } }
+        @keyframes wiggle { 0%, 100% { transform: rotate(-4deg); } 25% { transform: rotate(-10deg) scale(1.05); } 75% { transform: rotate(2deg) scale(1.05); } }
         @media (prefers-reduced-motion: reduce) {
             .screen.active, .card.pop, .r-emoji, .type-parade span, .btn { animation: none !important; }
         }
 
-        .card { background: var(--card); border: 1px solid var(--line); border-radius: 20px; padding: 28px 24px; box-shadow: 0 6px 24px rgba(80,40,160,.07); }
-        .card + .card { margin-top: 16px; }
+        .card {
+            background: var(--card); border: 2.5px solid var(--line); border-radius: 18px;
+            padding: 26px 22px; box-shadow: 5px 5px 0 var(--line);
+        }
+        .card + .card { margin-top: 20px; }
 
         .btn {
-            display: block; width: 100%; border: 0; cursor: pointer; text-align: center; text-decoration: none;
-            background: var(--brand); color: #fff; font-size: 16px; font-weight: 700;
-            padding: 15px 18px; border-radius: 14px; transition: transform .1s, background .15s;
+            display: block; width: 100%; cursor: pointer; text-align: center; text-decoration: none;
+            background: var(--brand); color: #fff; font-size: 16px; font-weight: 800;
+            padding: 14px 18px; border: 2.5px solid var(--line); border-radius: 14px;
+            box-shadow: 4px 4px 0 var(--line); transition: transform .08s, box-shadow .08s;
             font-family: inherit;
         }
-        .btn:active { transform: scale(.98); }
-        .btn.ghost { background: #fff; color: var(--brand); border: 1.5px solid var(--brand); }
+        .btn:active { transform: translate(3px, 3px); box-shadow: 1px 1px 0 var(--line); }
+        .btn.ghost { background: #fff; color: var(--ink); }
         .btn:focus-visible, .opt:focus-visible, input:focus-visible { outline: 3px solid rgba(124,58,237,.45); outline-offset: 2px; }
-        .btn + .btn { margin-top: 10px; }
+        .btn + .btn { margin-top: 12px; }
         .btn[disabled] { opacity: .5; cursor: default; }
 
         /* intro */
         .hero { text-align: center; padding: 8px 0 4px; }
-        .hero .emoji { font-size: 64px; line-height: 1.2; }
-        .hero h1 { font-size: 26px; font-weight: 800; margin: 12px 0 8px; letter-spacing: -.5px; text-wrap: balance; }
+        .hero .emoji { font-size: 60px; line-height: 1.2; }
+        .hero h1 { font-family: 'Black Han Sans', -apple-system, sans-serif; font-weight: 400; font-size: 32px; margin: 10px 0 8px; letter-spacing: -.5px; text-wrap: balance; }
         .hero p { color: var(--ink-2); font-size: 15px; }
-        .hero .meta { display: flex; justify-content: center; gap: 14px; margin: 18px 0 22px; font-size: 13px; color: var(--ink-2); }
-        .hero .meta span { background: #fff; border: 1px solid var(--line); border-radius: 999px; padding: 5px 12px; }
-        .type-parade { display: flex; justify-content: center; gap: 6px; margin: 16px 0 4px; font-size: 26px; }
+        .hero .meta { display: flex; justify-content: center; gap: 10px; margin: 18px 0 22px; font-size: 13px; font-weight: 700; color: var(--ink); }
+        .hero .meta span { background: #fff; border: 2px solid var(--line); border-radius: 999px; padding: 4px 12px; box-shadow: 2px 2px 0 var(--line); }
+        .type-parade { display: flex; justify-content: center; gap: 6px; margin: 14px 0 2px; font-size: 26px; }
         .type-parade span { display: inline-block; animation: bounce 1.6s ease-in-out infinite; cursor: default; }
-        .parade-caption { text-align: center; font-size: 12.5px; color: var(--ink-2); margin-bottom: 16px; }
-        .stats-line { text-align: center; font-size: 13px; font-weight: 700; color: var(--brand-deep); background: var(--brand-soft); border-radius: 999px; padding: 6px 14px; display: none; width: fit-content; margin: 0 auto 14px; }
-        .r-pct { font-size: 13px; font-weight: 700; color: var(--ink-2); margin: -6px 0 12px; }
+        .parade-caption { font-family: 'Gaegu', cursive; text-align: center; font-size: 17px; color: var(--ink-2); margin-bottom: 14px; transform: rotate(-1deg); }
+        .stats-line { text-align: center; font-size: 13px; font-weight: 800; color: var(--brand); background: var(--brand-soft); border: 2px solid var(--brand); border-radius: 999px; padding: 5px 14px; display: none; width: fit-content; margin: 0 auto 14px; }
         .invite-banner {
-            display: none; align-items: center; gap: 10px; background: var(--brand-soft); border: 1px solid #DDD1FA;
-            border-radius: 14px; padding: 12px 14px; margin-bottom: 16px; font-size: 14px; color: var(--brand-deep);
+            display: none; align-items: center; gap: 10px; background: #fff; border: 2.5px solid var(--line);
+            border-radius: 14px; padding: 12px 14px; margin-bottom: 16px; font-size: 14px; font-weight: 600;
+            box-shadow: 4px 4px 0 var(--line);
         }
         .invite-banner .ib-emoji { font-size: 22px; }
 
         /* quiz */
         .progress-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; }
-        .q-count { font-size: 13px; font-weight: 800; color: var(--brand); }
-        .q-pct { font-size: 12px; font-weight: 700; color: var(--ink-2); font-variant-numeric: tabular-nums; }
-        .progress { height: 10px; background: #E5DEF8; border-radius: 999px; overflow: hidden; margin-bottom: 18px; }
-        .progress i { display: block; height: 100%; width: 0; background: linear-gradient(90deg, #8B5CF6, #D946EF); border-radius: 999px; transition: width .3s cubic-bezier(.4, 0, .2, 1); }
-        .card.pop { animation: pop .28s ease; }
-        .q-text { font-size: 21px; font-weight: 800; letter-spacing: -.4px; margin-bottom: 20px; text-wrap: balance; }
+        .q-count { font-family: 'Gaegu', cursive; font-size: 18px; color: var(--ink); }
+        .q-pct { font-size: 12px; font-weight: 800; color: var(--ink-2); font-variant-numeric: tabular-nums; }
+        .progress { height: 14px; background: #fff; border: 2.5px solid var(--line); border-radius: 999px; overflow: hidden; margin-bottom: 18px; }
+        .progress i { display: block; height: 100%; width: 0; background: var(--brand); transition: width .3s cubic-bezier(.4, 0, .2, 1); }
+        .card.pop { animation: pop .25s ease; }
+        .q-text { font-family: 'Black Han Sans', -apple-system, sans-serif; font-weight: 400; font-size: 24px; letter-spacing: -.3px; margin-bottom: 20px; text-wrap: balance; }
         .opt {
             display: block; width: 100%; text-align: left; cursor: pointer; font-family: inherit;
-            background: #fff; border: 2px solid var(--line); border-radius: 16px;
-            padding: 15px 16px; font-size: 15.5px; font-weight: 600; color: var(--ink); margin-bottom: 10px;
-            transition: border-color .12s, background .12s, transform .1s;
+            background: #fff; border: 2.5px solid var(--line); border-radius: 12px;
+            padding: 14px 16px; font-size: 15.5px; font-weight: 600; color: var(--ink); margin-bottom: 12px;
+            box-shadow: 3px 3px 0 var(--line); transition: transform .08s, box-shadow .08s, background .1s;
         }
-        .opt:active { transform: scale(.98); }
-        .opt.picked { border-color: var(--brand); background: var(--brand-soft); transform: scale(.98); }
-        .q-back { background: none; border: 0; cursor: pointer; color: var(--ink-2); font-size: 14px; padding: 10px 0 0; font-family: inherit; }
+        .opt:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0 var(--line); }
+        .opt.picked { background: var(--brand-soft); transform: translate(2px, 2px); box-shadow: 1px 1px 0 var(--line); }
+        .q-back { background: none; border: 0; cursor: pointer; color: var(--ink-2); font-size: 14px; font-weight: 700; padding: 8px 0 0; font-family: inherit; }
 
-        /* hover 는 마우스 환경에서만 — 터치 기기의 sticky hover(선택이 다음 문항에 남아 보이는 문제) 방지 */
         @media (hover: hover) and (pointer: fine) {
-            .btn:hover { background: var(--brand-deep); }
-            .btn.ghost:hover { background: var(--brand-soft); }
-            .opt:hover { border-color: #C4B5FD; background: #FBFAFF; }
+            .btn:hover { filter: brightness(1.06); }
+            .opt:hover { background: #FDFAF2; }
             .q-back:hover { color: var(--ink); }
         }
 
         /* result — --tc 는 유형별 색으로 JS 가 채운다 */
-        .r-card {
-            --tc: #7C3AED;
-            text-align: center; position: relative; overflow: hidden;
-            background: linear-gradient(160deg, #fff 55%, color-mix(in srgb, var(--tc) 14%, #fff));
-            border-color: color-mix(in srgb, var(--tc) 30%, #fff);
+        .r-card { --tc: #7C3AED; text-align: center; position: relative; }
+        .r-label { font-family: 'Gaegu', cursive; display: inline-block; font-size: 18px; color: var(--ink-2); transform: rotate(-1.5deg); }
+        .r-emoji-box {
+            width: 132px; height: 132px; margin: 12px auto 4px; background: #fff;
+            border: 3px solid var(--line); border-radius: 22px; box-shadow: 6px 6px 0 var(--line);
+            display: flex; align-items: center; justify-content: center; transform: rotate(-4deg);
+            position: relative;
         }
-        .r-card::before {
-            content: ''; position: absolute; top: -70px; right: -70px; width: 180px; height: 180px;
-            border-radius: 50%; background: color-mix(in srgb, var(--tc) 12%, transparent); pointer-events: none;
+        .r-emoji-box::before {
+            content: ''; position: absolute; top: -14px; left: 50%; transform: translateX(-50%) rotate(-6deg);
+            width: 64px; height: 20px; background: var(--tc); opacity: .75;
         }
-        .r-label { display: inline-block; font-size: 12px; font-weight: 700; color: #fff; background: var(--tc); border-radius: 999px; padding: 5px 13px; letter-spacing: .5px; }
-        .r-emoji { font-size: 80px; line-height: 1.3; margin-top: 10px; animation: wiggle .7s ease .25s; }
-        .r-name { font-size: 28px; font-weight: 800; letter-spacing: -.5px; }
-        .r-track { display: inline-block; font-size: 13.5px; font-weight: 800; color: var(--tc); background: color-mix(in srgb, var(--tc) 12%, #fff); border-radius: 999px; padding: 3px 12px; margin: 6px 0 14px; }
-        .r-desc { font-size: 15px; color: var(--ink-2); text-align: left; background: #ffffffCC; border-radius: 12px; padding: 14px 16px; position: relative; }
-        .r-tags { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin-top: 14px; }
-        .r-tags span { font-size: 13px; font-weight: 700; color: color-mix(in srgb, var(--tc) 75%, #000); background: #fff; border: 1px solid color-mix(in srgb, var(--tc) 30%, #fff); border-radius: 999px; padding: 5px 11px; }
-        .chem-row { display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 14px; padding-top: 14px; border-top: 1px dashed var(--line); font-size: 14px; color: var(--ink-2); flex-wrap: wrap; }
+        .r-emoji { font-size: 76px; line-height: 1; animation: wiggle .7s ease .25s; }
+        .r-name { font-family: 'Black Han Sans', -apple-system, sans-serif; font-weight: 400; font-size: 34px; letter-spacing: -.5px; margin-top: 14px; }
+        .r-name .hl { box-shadow: inset 0 -14px 0 color-mix(in srgb, var(--tc) 35%, transparent); }
+        .r-track { display: inline-block; font-size: 13.5px; font-weight: 800; color: #fff; background: var(--tc); border: 2.5px solid var(--line); border-radius: 999px; padding: 3px 14px; margin: 10px 0 12px; box-shadow: 3px 3px 0 var(--line); }
+        .r-pct { font-size: 13px; font-weight: 700; color: var(--ink-2); margin: -2px 0 12px; }
+        .r-desc { font-size: 15px; color: var(--ink-2); text-align: left; background: var(--paper); border: 2px dashed #C9C2B4; border-radius: 12px; padding: 14px 16px; }
+        .r-tags { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-top: 14px; }
+        .r-tags span { font-size: 13px; font-weight: 700; color: var(--ink); background: #fff; border: 2px solid var(--line); border-radius: 999px; padding: 4px 11px; box-shadow: 2px 2px 0 var(--line); }
+        .chem-row { display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 14px; padding-top: 14px; border-top: 2px dashed #C9C2B4; font-size: 14px; color: var(--ink-2); flex-wrap: wrap; }
         .chem-row b { color: var(--ink); }
         #confetti-canvas { position: fixed; inset: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 20; }
-        .sec-title { font-size: 15px; font-weight: 800; margin-bottom: 12px; display: flex; align-items: center; gap: 6px; }
-        .majors { display: flex; flex-wrap: wrap; gap: 8px; }
-        .majors span { font-size: 14px; font-weight: 600; background: var(--brand-soft); color: var(--brand-deep); border-radius: 10px; padding: 8px 12px; }
-        .sub-row { display: flex; align-items: center; gap: 10px; margin-top: 14px; padding-top: 14px; border-top: 1px dashed var(--line); font-size: 14px; color: var(--ink-2); }
+        .sub-row { display: flex; align-items: center; gap: 10px; margin-top: 14px; padding-top: 14px; border-top: 2px dashed #C9C2B4; font-size: 14px; color: var(--ink-2); }
         .sub-row b { color: var(--ink); }
 
-        .nick-row { display: flex; gap: 8px; margin-top: 4px; }
+        .sec-title { font-size: 16px; font-weight: 800; margin-bottom: 14px; display: flex; align-items: center; gap: 6px; }
+        .majors { display: flex; flex-wrap: wrap; gap: 10px; }
+        .majors span { font-size: 14px; font-weight: 700; background: var(--brand-soft); color: var(--ink); border: 2px solid var(--line); border-radius: 10px; padding: 7px 12px; box-shadow: 2px 2px 0 var(--line); }
+
+        .nick-row { display: flex; gap: 10px; margin-top: 4px; }
         .nick-row input {
-            flex: 1; min-width: 0; border: 1.5px solid var(--line); border-radius: 12px; padding: 12px 14px;
+            flex: 1; min-width: 0; border: 2.5px solid var(--line); border-radius: 12px; padding: 12px 14px;
             font-size: 15px; font-family: inherit; color: var(--ink); background: #fff;
         }
-        .nick-row input::placeholder { color: #B4ACC9; }
-        .fun-form { display: flex; flex-direction: column; gap: 10px; margin-top: 4px; }
+        .nick-row input::placeholder { color: #B6AF9F; }
+        .nick-row .btn { width: auto; padding: 12px 18px; font-size: 15px; }
+        .fun-form { display: flex; flex-direction: column; gap: 12px; margin-top: 4px; }
         .fun-form input {
-            border: 1.5px solid var(--line); border-radius: 12px; padding: 13px 14px;
+            border: 2.5px solid var(--line); border-radius: 12px; padding: 13px 14px;
             font-size: 15px; font-family: inherit; color: var(--ink); background: #fff; width: 100%;
         }
-        .fun-form input::placeholder { color: #B4ACC9; }
+        .fun-form input::placeholder { color: #B6AF9F; }
         .fun-form .btn + .btn { margin-top: 0; }
-        .nick-row .btn { width: auto; padding: 12px 18px; font-size: 15px; }
         .hint { font-size: 12.5px; color: var(--ink-2); margin-top: 10px; }
-        .share-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 14px; }
+        .share-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 14px; }
         .share-btns .btn { margin: 0; font-size: 15px; padding: 13px 10px; }
         .toast {
             position: fixed; left: 50%; bottom: 28px; transform: translateX(-50%) translateY(80px);
-            background: var(--ink); color: #fff; font-size: 14px; padding: 11px 18px; border-radius: 999px;
+            background: var(--ink); color: #fff; font-size: 14px; font-weight: 600; padding: 11px 18px; border-radius: 999px;
             opacity: 0; transition: all .25s ease; pointer-events: none; white-space: nowrap; z-index: 10;
         }
         .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
         .friends-empty { font-size: 14px; color: var(--ink-2); text-align: center; padding: 10px 0 4px; }
-        .friend-row { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 1px solid #F1EDFB; }
+        .friend-row { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 2px dashed #EDE7DA; }
         .friend-row:last-child { border-bottom: 0; }
         .friend-row .f-emoji { font-size: 26px; }
-        .friend-row .f-name { font-weight: 700; font-size: 15px; }
+        .friend-row .f-name { font-weight: 800; font-size: 15px; }
         .friend-row .f-type { font-size: 13px; color: var(--ink-2); }
-        .friend-row .f-badge { margin-left: auto; font-size: 12px; font-weight: 700; color: var(--brand-deep); background: var(--brand-soft); border-radius: 999px; padding: 4px 10px; white-space: nowrap; }
+        .friend-row .f-badge { margin-left: auto; font-size: 12px; font-weight: 800; color: var(--ink); background: var(--brand-soft); border: 2px solid var(--line); border-radius: 999px; padding: 3px 10px; white-space: nowrap; }
         .friends-summary { font-size: 14px; color: var(--ink-2); margin-bottom: 8px; }
-        .team-sec { margin-top: 4px; }
-        .team-sec + .team-sec { margin-top: 18px; }
-        .team-sec-title { font-size: 13px; font-weight: 800; color: var(--ink-2); letter-spacing: .3px; margin-bottom: 8px; }
-        .dist-row { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; font-size: 13px; }
-        .dist-row .de { width: 22px; text-align: center; flex: none; }
-        .dist-row .db { height: 14px; border-radius: 999px; min-width: 14px; transition: width .4s ease; }
-        .dist-row .dc { color: var(--ink-2); font-weight: 700; flex: none; }
-        .role-row { display: flex; align-items: baseline; gap: 8px; padding: 6px 0; font-size: 14px; border-bottom: 1px solid #F1EDFB; }
-        .role-row:last-child { border-bottom: 0; }
-        .role-row .rl { font-weight: 800; flex: none; }
-        .role-row .rn { color: var(--ink-2); }
-        .chem-pair { display: flex; align-items: center; gap: 8px; font-size: 14px; padding: 6px 0; }
-        .chem-pair b { color: var(--ink); }
-        .chem-pair .cl { margin-left: auto; font-size: 12px; font-weight: 700; color: var(--brand-deep); background: var(--brand-soft); border-radius: 999px; padding: 3px 10px; white-space: nowrap; }
-        .refresh { background: none; border: 0; cursor: pointer; color: var(--brand); font-size: 13px; font-weight: 700; margin-left: auto; font-family: inherit; }
+        .refresh { background: none; border: 0; cursor: pointer; color: var(--brand); font-size: 13px; font-weight: 800; margin-left: auto; font-family: inherit; }
 
         .compare { display: flex; align-items: center; justify-content: center; gap: 14px; }
         .compare .c-col { text-align: center; }
         .compare .c-col .ce { font-size: 40px; }
         .compare .c-col .cn { font-size: 13px; font-weight: 700; margin-top: 2px; }
-        .compare .vs { font-size: 13px; font-weight: 800; color: var(--ink-2); }
-        .compare-note { text-align: center; font-size: 13.5px; color: var(--brand-deep); background: var(--brand-soft); border-radius: 10px; padding: 8px 12px; margin-top: 14px; }
+        .compare .vs { font-family: 'Gaegu', cursive; font-size: 20px; color: var(--ink-2); }
+        .compare-note { text-align: center; font-size: 13.5px; font-weight: 700; color: var(--ink); background: var(--brand-soft); border: 2px solid var(--line); border-radius: 10px; padding: 8px 12px; margin-top: 14px; box-shadow: 2px 2px 0 var(--line); }
 
-        .cta-card { background: linear-gradient(135deg, #7C3AED, #A855F7); color: #fff; border: 0; }
+        .team-sec { margin-top: 4px; }
+        .team-sec + .team-sec { margin-top: 18px; }
+        .team-sec-title { font-family: 'Gaegu', cursive; font-size: 17px; color: var(--ink-2); margin-bottom: 8px; }
+        .dist-row { display: flex; align-items: center; gap: 8px; margin-bottom: 7px; font-size: 13px; }
+        .dist-row .de { width: 22px; text-align: center; flex: none; }
+        .dist-row .db { height: 16px; border-radius: 4px; min-width: 16px; border: 2px solid var(--line); transition: width .4s ease; }
+        .dist-row .dc { color: var(--ink-2); font-weight: 800; flex: none; }
+        .role-row { display: flex; align-items: baseline; gap: 8px; padding: 7px 0; font-size: 14px; border-bottom: 2px dashed #EDE7DA; }
+        .role-row:last-child { border-bottom: 0; }
+        .role-row .rl { font-weight: 800; flex: none; }
+        .role-row .rn { color: var(--ink-2); }
+        .chem-pair { display: flex; align-items: center; gap: 8px; font-size: 14px; padding: 7px 0; }
+        .chem-pair b { color: var(--ink); }
+        .chem-pair .cl { margin-left: auto; font-size: 12px; font-weight: 800; color: var(--ink); background: var(--brand-soft); border: 2px solid var(--line); border-radius: 999px; padding: 2px 10px; white-space: nowrap; }
+
+        .cta-card { background: var(--ink); color: #fff; border-color: var(--ink); box-shadow: 5px 5px 0 #C9C2B4; }
         .cta-card .sec-title { color: #fff; }
-        .cta-card p { font-size: 14px; opacity: .92; margin-bottom: 14px; }
-        .cta-card .btn { background: #fff; color: var(--brand-deep); }
-        @media (hover: hover) and (pointer: fine) {
-            .cta-card .btn:hover { background: var(--brand-soft); }
-        }
+        .cta-card p { font-size: 14px; opacity: .85; margin-bottom: 14px; }
+        .cta-card .btn { background: #fff; color: var(--ink); border-color: #fff; box-shadow: 4px 4px 0 #555; }
 
-        footer { text-align: center; margin-top: 32px; font-size: 12.5px; color: #A79FBF; }
+        footer { text-align: center; margin-top: 32px; font-size: 12.5px; color: #A79E8D; }
         footer a { color: inherit; }
     </style>
 </head>
@@ -225,11 +233,11 @@
                     <div class="type-parade" aria-hidden="true">
                         <span style="animation-delay:0s">📚</span><span style="animation-delay:.15s">⚖️</span><span style="animation-delay:.3s">🔬</span><span style="animation-delay:.45s">🛠️</span><span style="animation-delay:.6s">🩺</span><span style="animation-delay:.75s">🎨</span><span style="animation-delay:.9s">🌱</span>
                     </div>
-                    <div class="parade-caption">7가지 유형 중 나는 뭘까?</div>
+                    <div class="parade-caption">7가지 유형 중에 나는 뭘까?</div>
                     <div class="stats-line" id="stats-line"></div>
                     <div class="meta"><span>⏱ 3분 컷</span><span>🔒 로그인 없음</span></div>
                     <button class="btn" id="btn-start">테스트 시작하기</button>
-                    <button class="btn ghost" id="btn-fun">이름으로 재미로 보기 ⚡ (10초)</button>
+                    <button class="btn ghost" id="btn-fun">이름으로 10초 만에 보기</button>
                     <button class="btn ghost" id="btn-my-result" style="display:none">내 결과 다시 보기</button>
                 </div>
             </div>
@@ -271,8 +279,8 @@
         <section id="screen-result" class="screen">
             <div class="card r-card">
                 <span class="r-label">나의 학과 성향</span>
-                <div class="r-emoji" id="r-emoji"></div>
-                <div class="r-name" id="r-name"></div>
+                <div class="r-emoji-box"><div class="r-emoji" id="r-emoji"></div></div>
+                <div class="r-name"><span class="hl" id="r-name"></span></div>
                 <div class="r-track" id="r-track"></div>
                 <div class="r-pct" id="r-pct" style="display:none"></div>
                 <div class="r-desc" id="r-desc"></div>
@@ -282,18 +290,18 @@
             </div>
 
             <div class="card" id="compare-card" style="display:none">
-                <div class="sec-title">👀 초대한 친구와 비교</div>
+                <div class="sec-title">초대한 친구랑 비교</div>
                 <div class="compare" id="compare-body"></div>
                 <div class="compare-note" id="compare-note" style="display:none"></div>
             </div>
 
             <div class="card">
-                <div class="sec-title">🎯 이런 학과가 잘 맞아요</div>
+                <div class="sec-title">이런 학과가 잘 맞아요</div>
                 <div class="majors" id="r-majors"></div>
             </div>
 
             <div class="card" id="save-card">
-                <div class="sec-title">🔗 내 결과 공유하기</div>
+                <div class="sec-title">내 결과 공유하기</div>
                 <div id="save-form">
                     <div class="nick-row">
                         <input id="nickname" type="text" maxlength="12" placeholder="닉네임 (선택)" autocomplete="off">
@@ -306,26 +314,26 @@
                         <button class="btn" id="btn-share">공유하기</button>
                         <button class="btn ghost" id="btn-copy">링크 복사</button>
                     </div>
-                    <button class="btn ghost" id="btn-save-image" style="margin-top:10px">결과 카드 이미지 저장 📸</button>
+                    <button class="btn ghost" id="btn-save-image" style="margin-top:10px">결과 카드 저장</button>
                 </div>
             </div>
 
             <div class="card" id="friends-card" style="display:none">
-                <div class="sec-title">👥 함께한 친구들 <button class="refresh" id="btn-refresh">새로고침</button></div>
+                <div class="sec-title">함께한 친구들 <button class="refresh" id="btn-refresh">새로고침</button></div>
                 <div class="friends-summary" id="friends-summary" style="display:none"></div>
-                <div id="friends-list"><div class="friends-empty">아직 아무도 없어요. 링크를 공유해보세요! 🚀</div></div>
+                <div id="friends-list"><div class="friends-empty">아직 아무도 없어요. 링크를 뿌려보세요!</div></div>
             </div>
 
             <div class="card" id="team-card" style="display:none">
-                <div class="sec-title">🏆 우리팀 리포트</div>
+                <div class="sec-title">우리팀 리포트</div>
                 <div class="team-sec"><div class="team-sec-title">유형 분포</div><div id="team-dist"></div></div>
                 <div class="team-sec"><div class="team-sec-title">팀 역할</div><div id="team-roles"></div></div>
                 <div class="team-sec" id="team-chem-sec" style="display:none"><div class="team-sec-title">케미 조합</div><div id="team-chem"></div></div>
-                <button class="btn ghost" id="btn-team-image" style="margin-top:16px">우리팀 카드 저장 📸</button>
+                <button class="btn ghost" id="btn-team-image" style="margin-top:16px">우리팀 카드 저장</button>
             </div>
 
             <div class="card cta-card">
-                <div class="sec-title">📊 이 학과, 실제 경쟁률은?</div>
+                <div class="sec-title">이 학과, 실제 경쟁률은?</div>
                 <p>Claspeek 앱에서 대학별 경쟁률·입결 등급과 재학생 커뮤니티를 확인해보세요.</p>
                 <a class="btn" id="btn-app" href="https://www.claspeek.com/">Claspeek 앱 받기</a>
             </div>
@@ -352,6 +360,7 @@
     // ===== 유형 데이터 (H:인문 S:사회 N:자연 E:공학 M:의약 A:예체능 D:교육) =====
     var TYPES = {
         HUMANITIES: {
+            quote: "지나가는 문장 하나에도 과몰입하는 사람",
             slug: 'humanities',
             color: '#F97316',
             emoji: '📚', name: '이야기 수집가', track: '인문 계열',
@@ -361,6 +370,7 @@
             match: 'ARTS_SPORTS', matchNote: '감각 폭발형과 만나면 스토리에 색이 입혀지는 환상의 콤비!'
         },
         SOCIAL: {
+            quote: "어디서든 \"네가 반장 해라\" 소리 듣는 사람",
             slug: 'social',
             color: '#3B82F6',
             emoji: '⚖️', name: '세상 설계자', track: '사회 계열',
@@ -370,6 +380,7 @@
             match: 'ENGINEERING', matchNote: '집요한 메이커와 만나면 기획×구현, 창업해도 되는 조합!'
         },
         NATURAL: {
+            quote: "\"그게 왜 되는데?\"를 못 참는 사람",
             slug: 'natural',
             color: '#06B6D4',
             emoji: '🔬', name: '원리 탐정', track: '자연 계열',
@@ -379,6 +390,7 @@
             match: 'MEDICAL', matchNote: '사람 살리는 손과 만나면 연구실 최강 듀오!'
         },
         ENGINEERING: {
+            quote: "\"이거 더 편하게 안 되나?\"가 인생 질문인 사람",
             slug: 'engineering',
             color: '#6366F1',
             emoji: '🛠️', name: '집요한 메이커', track: '공학 계열',
@@ -388,6 +400,7 @@
             match: 'SOCIAL', matchNote: '세상 설계자와 만나면 기획×구현, 창업해도 되는 조합!'
         },
         MEDICAL: {
+            quote: "위기의 순간에 제일 침착해지는 사람",
             slug: 'medical',
             color: '#F43F5E',
             emoji: '🩺', name: '사람 살리는 손', track: '의약·보건 계열',
@@ -397,6 +410,7 @@
             match: 'NATURAL', matchNote: '원리 탐정과 만나면 연구실 최강 듀오!'
         },
         ARTS_SPORTS: {
+            quote: "정해진 답 말고 내 답을 만드는 사람",
             slug: 'arts',
             color: '#EC4899',
             emoji: '🎨', name: '감각 폭발형', track: '예체능 계열',
@@ -406,6 +420,7 @@
             match: 'HUMANITIES', matchNote: '이야기 수집가와 만나면 스토리에 색이 입혀지는 환상의 콤비!'
         },
         EDUCATION: {
+            quote: "설명 한 번으로 친구 성적 올려본 사람",
             slug: 'education',
             color: '#22C55E',
             emoji: '🌱', name: '성장 조력자', track: '교육 계열',
@@ -870,7 +885,7 @@
                 if (!group.friends || group.friends.length === 0) {
                     var empty = document.createElement('div');
                     empty.className = 'friends-empty';
-                    empty.textContent = '아직 아무도 없어요. 링크를 공유해보세요! 🚀';
+                    empty.textContent = '아직 아무도 없어요. 링크를 뿌려보세요!';
                     list.appendChild(empty);
                     summary.style.display = 'none';
                     return;
@@ -919,7 +934,7 @@
             statsData = st;
             if (st.total >= 20) {
                 var el = $('stats-line');
-                el.textContent = '🔥 지금까지 ' + st.total.toLocaleString('ko-KR') + '명이 참여했어요';
+                el.textContent = '지금까지 ' + st.total.toLocaleString('ko-KR') + '명이 해봤어요';
                 el.style.display = 'block';
             }
             renderResultPct();
@@ -943,61 +958,102 @@
         var b = Math.max(0, Math.min(255, (n & 255) + amt));
         return 'rgb(' + r + ',' + g + ',' + b + ')';
     }
+    function drawPaperBase(ctx, W, H) {
+        ctx.fillStyle = '#FFF9EE';
+        ctx.fillRect(0, 0, W, H);
+        ctx.strokeStyle = 'rgba(0,0,0,.045)';
+        ctx.lineWidth = 2;
+        for (var gx = 0; gx <= W; gx += 60) {
+            ctx.beginPath(); ctx.moveTo(gx, 0); ctx.lineTo(gx, H); ctx.stroke();
+        }
+        for (var gy = 0; gy <= H; gy += 60) {
+            ctx.beginPath(); ctx.moveTo(0, gy); ctx.lineTo(W, gy); ctx.stroke();
+        }
+    }
     function drawResultCard() {
         var t = TYPES[myType];
         var W = 1080, H = 1920;
         var canvas = document.createElement('canvas');
         canvas.width = W; canvas.height = H;
         var ctx = canvas.getContext('2d');
+        drawPaperBase(ctx, W, H);
 
-        var grad = ctx.createLinearGradient(0, 0, W, H);
-        grad.addColorStop(0, shadeColor(t.color, 45));
-        grad.addColorStop(1, shadeColor(t.color, -35));
-        ctx.fillStyle = grad;
-        ctx.fillRect(0, 0, W, H);
-
-        ctx.fillStyle = 'rgba(255,255,255,.14)';
-        ctx.beginPath(); ctx.arc(W - 60, 180, 260, 0, 7); ctx.fill();
-        ctx.beginPath(); ctx.arc(90, H - 260, 300, 0, 7); ctx.fill();
+        // 이모지 스티커 (테이프 + 그림자 박스, 살짝 기울임)
+        ctx.save();
+        ctx.translate(W / 2, 560);
+        ctx.rotate(-4 * Math.PI / 180);
+        ctx.fillStyle = '#171513';
+        ctx.beginPath(); ctx.roundRect(-250 + 22, -250 + 22, 500, 500, 48); ctx.fill();
+        ctx.fillStyle = '#fff';
+        ctx.strokeStyle = '#171513'; ctx.lineWidth = 9;
+        ctx.beginPath(); ctx.roundRect(-250, -250, 500, 500, 48); ctx.fill(); ctx.stroke();
+        ctx.font = '300px -apple-system, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText(t.emoji, 0, 110);
+        ctx.globalAlpha = .78;
+        ctx.fillStyle = t.color;
+        ctx.fillRect(-80, -282, 160, 52);
+        ctx.globalAlpha = 1;
+        ctx.restore();
 
         ctx.textAlign = 'center';
+        ctx.fillStyle = '#444';
+        ctx.font = '700 54px Gaegu, -apple-system, sans-serif';
+        ctx.save();
+        ctx.translate(W / 2, 950);
+        ctx.rotate(-1.5 * Math.PI / 180);
+        ctx.fillText('내 학과 성향, 이거 나옴', 0, 0);
+        ctx.restore();
+
+        // 유형명 + 형광펜 하이라이트
+        ctx.font = '110px "Black Han Sans", -apple-system, sans-serif';
+        var nameW = ctx.measureText(t.name).width;
+        ctx.globalAlpha = .35;
+        ctx.fillStyle = t.color;
+        ctx.fillRect((W - nameW) / 2 - 14, 1040, nameW + 28, 54);
+        ctx.globalAlpha = 1;
+        ctx.fillStyle = '#171513';
+        ctx.fillText(t.name, W / 2, 1080);
+
+        // 계열 태그
+        ctx.font = '700 46px -apple-system, "Apple SD Gothic Neo", sans-serif';
+        var trackW = ctx.measureText(t.track).width + 90;
+        ctx.fillStyle = '#171513';
+        ctx.beginPath(); ctx.roundRect((W - trackW) / 2 + 8, 1148 + 8, trackW, 92, 46); ctx.fill();
+        ctx.fillStyle = t.color;
+        ctx.strokeStyle = '#171513'; ctx.lineWidth = 7;
+        ctx.beginPath(); ctx.roundRect((W - trackW) / 2, 1148, trackW, 92, 46); ctx.fill(); ctx.stroke();
         ctx.fillStyle = '#fff';
+        ctx.fillText(t.track, W / 2, 1212);
 
-        ctx.font = '700 40px -apple-system, "Apple SD Gothic Neo", sans-serif';
-        ctx.globalAlpha = .92;
-        ctx.fillText('나의 학과 성향은?', W / 2, 330);
-        ctx.globalAlpha = 1;
+        // 어록
+        ctx.fillStyle = '#3A362E';
+        ctx.font = '500 48px -apple-system, "Apple SD Gothic Neo", sans-serif';
+        wrapText(ctx, t.quote, W / 2, 1370, 860, 68);
 
-        ctx.font = '340px -apple-system, sans-serif';
-        ctx.fillText(t.emoji, W / 2, 830);
-
-        ctx.font = '800 96px -apple-system, "Apple SD Gothic Neo", sans-serif';
-        ctx.fillText(t.name, W / 2, 1030);
-
-        // 계열 필
-        ctx.font = '700 44px -apple-system, "Apple SD Gothic Neo", sans-serif';
-        var trackW = ctx.measureText(t.track).width + 80;
-        ctx.fillStyle = 'rgba(255,255,255,.25)';
-        ctx.beginPath();
-        ctx.roundRect((W - trackW) / 2, 1080, trackW, 84, 42);
-        ctx.fill();
-        ctx.fillStyle = '#fff';
-        ctx.fillText(t.track, W / 2, 1138);
-
-        ctx.font = '600 42px -apple-system, "Apple SD Gothic Neo", sans-serif';
-        ctx.globalAlpha = .95;
-        ctx.fillText(t.tags.join('  '), W / 2, 1270);
-        var mt = TYPES[t.match];
-        if (mt) ctx.fillText('💘 환상의 케미 ' + mt.emoji + ' ' + mt.name, W / 2, 1360);
-        ctx.globalAlpha = 1;
-
-        ctx.font = '700 44px -apple-system, "Apple SD Gothic Neo", sans-serif';
-        ctx.fillText('너도 해봐 👉 claspeek.com/major-test', W / 2, 1650);
-        ctx.font = '800 40px -apple-system, sans-serif';
-        ctx.globalAlpha = .9;
-        ctx.fillText('Claspeek', W / 2, 1780);
-        ctx.globalAlpha = 1;
+        // 푸터
+        ctx.fillStyle = '#A79E8D';
+        ctx.font = '700 40px -apple-system, sans-serif';
+        ctx.fillText('claspeek.com/major-test', W / 2, 1700);
+        ctx.font = '44px "Black Han Sans", -apple-system, sans-serif';
+        ctx.fillStyle = '#171513';
+        ctx.fillText('CLASPEEK', W / 2, 1790);
         return canvas;
+    }
+    function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
+        var words = text.split(' ');
+        var line = '';
+        words.forEach(function (word) {
+            var test = line ? line + ' ' + word : word;
+            if (ctx.measureText(test).width > maxWidth && line) {
+                ctx.fillText(line, x, y);
+                line = word;
+                y += lineHeight;
+            } else {
+                line = test;
+            }
+        });
+        if (line) ctx.fillText(line, x, y);
     }
     function saveResultImage() {
         if (!myType) return;
@@ -1131,58 +1187,62 @@
         var canvas = document.createElement('canvas');
         canvas.width = W; canvas.height = H;
         var ctx = canvas.getContext('2d');
-        var grad = ctx.createLinearGradient(0, 0, W, H);
-        grad.addColorStop(0, '#8B5CF6');
-        grad.addColorStop(1, '#4C1D95');
-        ctx.fillStyle = grad;
-        ctx.fillRect(0, 0, W, H);
-        ctx.fillStyle = 'rgba(255,255,255,.12)';
-        ctx.beginPath(); ctx.arc(W - 40, 160, 240, 0, 7); ctx.fill();
-        ctx.beginPath(); ctx.arc(60, H - 200, 280, 0, 7); ctx.fill();
+        drawPaperBase(ctx, W, H);
 
         ctx.textAlign = 'center';
-        ctx.fillStyle = '#fff';
-        ctx.font = '800 76px -apple-system, "Apple SD Gothic Neo", sans-serif';
-        ctx.fillText('우리들의 학과 성향 🎓', W / 2, 260);
-        ctx.font = '700 40px -apple-system, "Apple SD Gothic Neo", sans-serif';
-        ctx.globalAlpha = .9;
-        ctx.fillText('총 ' + members.length + '명 참여', W / 2, 340);
-        ctx.globalAlpha = 1;
+        ctx.fillStyle = '#171513';
+        ctx.font = '92px "Black Han Sans", -apple-system, sans-serif';
+        ctx.fillText('우리들의 학과 성향', W / 2, 250);
+        ctx.fillStyle = '#444';
+        ctx.font = '700 52px Gaegu, -apple-system, sans-serif';
+        ctx.save();
+        ctx.translate(W / 2, 330);
+        ctx.rotate(-1 * Math.PI / 180);
+        ctx.fillText('총 ' + members.length + '명, 유형 공개!', 0, 0);
+        ctx.restore();
 
         var shown = members.slice(0, 9);
-        var rowH = 118, startY = 470;
+        var rowH = 128, startY = 470;
         shown.forEach(function (m, i) {
             var y = startY + i * rowH;
-            ctx.fillStyle = 'rgba(255,255,255,.16)';
-            ctx.beginPath();
-            ctx.roundRect(90, y - 66, W - 180, 96, 28);
-            ctx.fill();
+            var tilt = (i % 2 === 0 ? -0.8 : 0.8) * Math.PI / 180;
+            ctx.save();
+            ctx.translate(W / 2, y);
+            ctx.rotate(tilt);
+            ctx.fillStyle = '#171513';
+            ctx.beginPath(); ctx.roundRect(-410 + 10, -55 + 10, 820, 104, 26); ctx.fill();
             ctx.fillStyle = '#fff';
-            ctx.textAlign = 'left';
-            ctx.font = '64px -apple-system, sans-serif';
-            ctx.fillText(TYPES[m.type].emoji, 130, y + 8);
-            ctx.font = '800 46px -apple-system, "Apple SD Gothic Neo", sans-serif';
-            ctx.fillText(m.name, 240, y);
-            ctx.textAlign = 'right';
-            ctx.font = '600 38px -apple-system, "Apple SD Gothic Neo", sans-serif';
-            ctx.globalAlpha = .9;
-            ctx.fillText(TYPES[m.type].name, W - 130, y);
+            ctx.strokeStyle = '#171513'; ctx.lineWidth = 6;
+            ctx.beginPath(); ctx.roundRect(-410, -55, 820, 104, 26); ctx.fill(); ctx.stroke();
+            ctx.globalAlpha = .8;
+            ctx.fillStyle = TYPES[m.type].color;
+            ctx.fillRect(-410 + 30, -55 + 30, 14, 44);
             ctx.globalAlpha = 1;
+            ctx.fillStyle = '#171513';
+            ctx.textAlign = 'left';
+            ctx.font = '62px -apple-system, sans-serif';
+            ctx.fillText(TYPES[m.type].emoji, -350, 22);
+            ctx.font = '800 48px -apple-system, "Apple SD Gothic Neo", sans-serif';
+            ctx.fillText(m.name, -250, 18);
+            ctx.textAlign = 'right';
+            ctx.font = '600 40px -apple-system, "Apple SD Gothic Neo", sans-serif';
+            ctx.fillStyle = '#6E6759';
+            ctx.fillText(TYPES[m.type].name, 370, 16);
+            ctx.restore();
         });
         ctx.textAlign = 'center';
         if (members.length > 9) {
-            ctx.font = '600 38px -apple-system, "Apple SD Gothic Neo", sans-serif';
-            ctx.globalAlpha = .85;
-            ctx.fillText('외 ' + (members.length - 9) + '명이 더 있어요!', W / 2, startY + 9 * rowH);
-            ctx.globalAlpha = 1;
+            ctx.fillStyle = '#6E6759';
+            ctx.font = '700 44px Gaegu, -apple-system, sans-serif';
+            ctx.fillText('+ ' + (members.length - 9) + '명 더 있음', W / 2, startY + 9 * rowH);
         }
 
-        ctx.font = '700 44px -apple-system, "Apple SD Gothic Neo", sans-serif';
-        ctx.fillText('너도 해봐 👉 claspeek.com/major-test', W / 2, 1700);
-        ctx.font = '800 40px -apple-system, sans-serif';
-        ctx.globalAlpha = .9;
-        ctx.fillText('Claspeek', W / 2, 1800);
-        ctx.globalAlpha = 1;
+        ctx.fillStyle = '#A79E8D';
+        ctx.font = '700 40px -apple-system, sans-serif';
+        ctx.fillText('claspeek.com/major-test', W / 2, 1700);
+        ctx.font = '44px "Black Han Sans", -apple-system, sans-serif';
+        ctx.fillStyle = '#171513';
+        ctx.fillText('CLASPEEK', W / 2, 1790);
         return canvas;
     }
     function saveTeamImage() {
