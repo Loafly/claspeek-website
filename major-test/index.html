@@ -208,6 +208,9 @@
         .cta-card .sec-title { color: #fff; }
         .cta-card p { font-size: 14px; opacity: .85; margin-bottom: 14px; }
         .cta-card .btn { background: #fff; color: var(--ink); border-color: #fff; box-shadow: 4px 4px 0 #555; }
+        .cta-card { position: relative; }
+        .cta-card .cta-tape { position: absolute; top: -12px; left: 50%; width: 92px; height: 24px; transform: translateX(-50%) rotate(-3deg); background: rgba(255, 221, 87, .92); border: 2px solid var(--line); box-shadow: 2px 2px 0 var(--line); }
+        .cta-card .cta-sub { font-size: 12px; opacity: .7; margin-top: 10px; text-align: center; }
 
         footer { text-align: center; margin-top: 32px; font-size: 12.5px; color: #A79E8D; }
         footer a { color: inherit; }
@@ -300,6 +303,15 @@
                 <div class="majors" id="r-majors"></div>
             </div>
 
+            <!-- 앱 CTA - 학과 목록 바로 아래. 맨 아래(공유·친구·팀 카드 뒤)에 있을 땐 스크롤이 닿지 않았다 -->
+            <div class="card cta-card">
+                <div class="cta-tape" aria-hidden="true"></div>
+                <div class="sec-title" id="cta-title">이 학과, 실제 경쟁률은?</div>
+                <p id="cta-desc">대학별 경쟁률·입결 등급부터 재학생 커뮤니티까지, 클라스픽 앱에서 바로 볼 수 있어요.</p>
+                <a class="btn" id="btn-app" href="https://www.claspeek.com/" rel="noopener">클라스픽 앱에서 경쟁률 보기</a>
+                <div class="cta-sub">iOS · Android 무료 · 학생증 인증 커뮤니티</div>
+            </div>
+
             <div class="card" id="save-card">
                 <div class="sec-title">내 결과 공유하기</div>
                 <div id="save-form">
@@ -330,12 +342,6 @@
                 <div class="team-sec"><div class="team-sec-title">팀 역할</div><div id="team-roles"></div></div>
                 <div class="team-sec" id="team-chem-sec" style="display:none"><div class="team-sec-title">케미 조합</div><div id="team-chem"></div></div>
                 <button class="btn ghost" id="btn-team-image" style="margin-top:16px">우리팀 카드 저장</button>
-            </div>
-
-            <div class="card cta-card">
-                <div class="sec-title">이 학과, 실제 경쟁률은?</div>
-                <p>Claspeek 앱에서 대학별 경쟁률·입결 등급과 재학생 커뮤니티를 확인해보세요.</p>
-                <a class="btn" id="btn-app" href="https://www.claspeek.com/">Claspeek 앱 받기</a>
             </div>
 
             <button class="btn ghost" id="btn-retry" style="margin-top:16px">테스트 다시 하기</button>
@@ -713,6 +719,8 @@
     // ===== 결과 =====
     function renderResult(typeKey, subKey, isSavedResult) {
         var t = TYPES[typeKey];
+        initAppLink(typeKey);
+        trackWeb('web_major_test_result_view');
         document.querySelector('.r-card').style.setProperty('--tc', t.color);
         document.querySelector('.r-label').textContent = funMode ? '재미로 보는 학과 성향' : '나의 학과 성향';
         $('r-emoji').textContent = t.emoji;
@@ -1265,10 +1273,43 @@
     }
 
     // ===== 앱 CTA =====
-    function initAppLink() {
+    // 스토어 링크는 결과 유형이 정해진 뒤 채운다 - Android 는 Play Install Referrer 에
+    // utm_campaign=유형 을 실어 Play Console 획득 보고서에서 어느 유형이 설치로 이어지는지 본다.
+    // iOS 는 캠페인 링크에 provider token(pt)이 필요해 일반 링크로 둔다. 데스크톱은 홈으로.
+    function initAppLink(typeKey) {
         var ua = navigator.userAgent;
-        if (/android/i.test(ua)) $('btn-app').href = ANDROID_STORE;
-        else if (/iphone|ipad|ipod/i.test(ua)) $('btn-app').href = IOS_STORE;
+        var t = TYPES[typeKey];
+        var slug = t ? t.slug : 'unknown';
+        var btn = $('btn-app');
+        if (/android/i.test(ua)) {
+            var referrer = 'utm_source=major_test&utm_medium=web&utm_campaign=' + slug;
+            btn.href = ANDROID_STORE + '&referrer=' + encodeURIComponent(referrer);
+        } else if (/iphone|ipad|ipod/i.test(ua)) {
+            btn.href = IOS_STORE;
+        } else {
+            btn.href = 'https://www.claspeek.com/';
+        }
+        if (t && t.majors && t.majors.length) {
+            $('cta-title').textContent = "'" + t.majors[0] + "' 실제 경쟁률은?";
+        }
+    }
+
+    // ===== 웹 이벤트 기록 =====
+    // 앱과 같은 /v1/app-events 로 보낸다(비로그인 허용). deviceId 를 비워 두는 이유:
+    // 어드민 사용 통계의 '활성 기기'가 deviceId 를 세므로, 웹 방문자를 앱 기기로 잡지 않기 위해서다.
+    // 결과 도달 수와 CTA 클릭 수만 남겨 전환율을 본다. 실패해도 사용자 흐름에는 영향 없다.
+    function trackWeb(action) {
+        try {
+            var body = JSON.stringify({
+                events: [{ eventType: 'ACTION', screenName: action, occurredAt: Date.now() }]
+            });
+            // sendBeacon 은 application/json 이면 교차 출처 preflight 를 못 해 막힌다.
+            // keepalive fetch 는 스토어로 넘어가는 중에도 작은 본문은 끝까지 보낸다.
+            fetch(API + '/v1/app-events', {
+                method: 'POST', headers: { 'Content-Type': 'application/json' },
+                body: body, keepalive: true
+            }).catch(function () {});
+        } catch (e) { /* 집계 실패는 무시 */ }
     }
 
     // ===== 이벤트 바인딩 =====
@@ -1295,6 +1336,7 @@
     $('nickname').addEventListener('keydown', function (e) {
         if (e.key === 'Enter') saveResult();
     });
+    $('btn-app').addEventListener('click', function () { trackWeb('web_major_test_app_cta'); });
     $('btn-share').addEventListener('click', doShare);
     $('btn-save-image').addEventListener('click', saveResultImage);
     $('btn-team-image').addEventListener('click', saveTeamImage);
@@ -1308,7 +1350,6 @@
     });
 
     initIntro();
-    initAppLink();
     loadStats();
     </script>
 </body>
